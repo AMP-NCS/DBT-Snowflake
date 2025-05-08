@@ -1,0 +1,51 @@
+# yml files must start with version: 2
+# this yml file lists all sources of raw data to be used by DBT for model builds
+version: 2
+
+# source name as it will be used by dbt
+
+sources:
+  - name: GENERAL #first identifier used by DBT
+    schema: GENERAL #schema within snowflake
+    database: AMP_DB #database within snowflake
+    tables:
+
+      - name: GIFT_CARD_TRANSACTION_INVOICE
+        identifier: GIFT_CARD_TRANSACTION_INVOICE # actual name of referenced table in database
+        description: test
+      - name: GIFT_CARD_TRANSACTION
+        identifier: GIFT_CARD_TRANSACTION # actual name of referenced table in database
+        description: test
+      - name: MOBILEUSER__C
+        identifier: MOBILEUSER__C # actual name of referenced table in database
+        description: test
+      - name: AUTOWASHLOCATION__C
+        identifier: AUTOWASHLOCATION__C # actual name of referenced table in database
+        description: test
+      - name: CONTACT
+        identifier: CONTACT # actual name of referenced table in database
+        description: test
+
+  - name: REPORTING #first identifier used by DBT
+    schema: REPORTING #schema within snowflake
+    database: AMP_DB #database within snowflake
+    tables:
+
+      - name: STRIPE_INVOICES # table name as it will be used by dbt
+        identifier: STRIPE_INVOICES # actual name of referenced table in database
+        description: test
+      - name: STRIPE_INVOICE_LINE_ITEMS
+        identifier: STRIPE_INVOICE_LINE_ITEMS # actual name of referenced table in database
+        description: test
+      - name: TENANT_HIERARCHY
+        identifier: TENANT_HIERARCHY # actual name of referenced table in database
+        description: test
+
+  - name: INTERNAL #first identifier used by DBT
+    schema: INTERNAL #schema within snowflake
+    database: AMP_DB #database within snowflake
+    tables:
+
+      - name: LOCATION_HIERARCHY # table name as it will be used by dbt
+        identifier: LOCATION_HIERARCHY # actual name of referenced table in database
+        description: test
