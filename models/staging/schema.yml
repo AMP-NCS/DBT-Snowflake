@@ -1,0 +1,20 @@
+models:
+
+  
+  - name: STG_REF_USERS  # Replace with actual model file name (without .sql)
+    description: >
+      Staging model for user data enriched with contact info
+    columns:
+      - name: USER_ID
+        description: Primary key for users
+        tests:
+          - not_null
+          - unique
+      - name: STRIPE_CUSTOMER_ID
+        description: Stripe ID of the customer
+        tests:
+          - unique
+      - name: TENANT_ID
+        description: External ID of the tenant for this location
+        tests:
+          - not_null
