@@ -5,47 +5,259 @@ version: 2
 # source name as it will be used by dbt
 
 sources:
+
+#sources added as part of Transactions All build
+
   - name: GENERAL #first identifier used by DBT
     schema: GENERAL #schema within snowflake
     database: AMP_DB #database within snowflake
     tables:
 
       - name: GIFT_CARD_TRANSACTION_INVOICE
-        identifier: GIFT_CARD_TRANSACTION_INVOICE # actual name of referenced table in database
-        description: test
+        identifier: GIFT_CARD_TRANSACTION_INVOICE
+        description: Source table for gift card transaction invoice records
       - name: GIFT_CARD_TRANSACTION
-        identifier: GIFT_CARD_TRANSACTION # actual name of referenced table in database
-        description: test
-      - name: MOBILEUSER__C
-        identifier: MOBILEUSER__C # actual name of referenced table in database
-        description: test
+        identifier: GIFT_CARD_TRANSACTION
+        description: Source table for individual gift card transactions
+      - name: GIFT_CARD_TRANSACTION_PURCHASE
+        identifier: GIFT_CARD_TRANSACTION_PURCHASE
+        description: Source table for gift card purchase details
+      - name: GIFT_CARD_PROMOTION
+        identifier: GIFT_CARD_PROMOTION
+        description: Source table for gift card promotion metadata
+      - name: PRICE_GROUP
+        identifier: PRICE_GROUP
+        description: Source table for price group definitions
+      - name: TAX_RATE
+        identifier: TAX_RATE
+        description: Source table for tax rate information by region
       - name: AUTOWASHLOCATION__C
-        identifier: AUTOWASHLOCATION__C # actual name of referenced table in database
-        description: test
+        identifier: AUTOWASHLOCATION__C
+        description: Source table for AutoWash location attributes
+      - name: AUTOWASH_ACCOUNT__C
+        identifier: AUTOWASH_ACCOUNT__C
+        description: Source table for AutoWash account settings
+      - name: POS_PLAN_MIGRATED
+        identifier: POS_PLAN_MIGRATED
+        description: The GENERAL.POS_PLAN_MIGRATED table tracks the migration of point-of-sale (POS) plans, including related user and vehicle IDs, Stripe subscription information, migration status, and timestamps, associated with specific tenants.
+      - name: POS_PLAN_IMPORTED
+        identifier: POS_PLAN_IMPORTED
+        description: The GENERAL.POS_PLAN_IMPORTED table stores imported point-of-sale (POS) plan data, including customer and vehicle information, billing details, cancellation status, and integration metadata, tied to tenants and legacy plan identifiers.
+      - name: SUBSCRIPTION_SIGN_UP
+        identifier: SUBSCRIPTION_SIGN_UP
+        description: The GENERAL.SUBSCRIPTION_SIGN_UP table records details of subscription sign-ups, including location coordinates, customer and subscription identifiers, associated pricing, and creation metadata for each tenant.
+      - name: PREPAID_WASH_PROMOTION_RECIPIENT
+        identifier: PREPAID_WASH_PROMOTION_RECIPIENT
+        description: Source table for prepaid wash promotion recipients
+      - name: PREPAID_PLAN_PURCHASE
+        identifier: PREPAID_PLAN_PURCHASE
+        description: Source table for prepaid plan purchase records
+      - name: PREPAID_PURCHASE_DETAIL
+        identifier: PREPAID_PURCHASE_DETAIL
+        description: Source table for prepaid purchase detail information
+      - name: PREPAID_PLAN_PROMOTION
+        identifier: PREPAID_PLAN_PROMOTION
+        description: Source table for prepaid plan promotion definitions
+      - name: PREPAID_PLAN
+        identifier: PREPAID_PLAN
+        description: Source table for prepaid plan redemptions
+      - name: PREPAID_PLAN_RECIPIENT
+        identifier: PREPAID_PLAN_RECIPIENT
+        description: Source table for prepaid plan recipient mappings
+      - name: PREPAID_WASH_PROMOTION_PURCHASE
+        identifier: PREPAID_WASH_PROMOTION_PURCHASE
+        description: Source table for prepaid wash promotion purchases
+      - name: CREDITS_USED_ON_GIFT_CARDS
+        identifier: CREDITS_USED_ON_GIFT_CARDS
+        description: Source table for credit usage on gift cards
+      - name: WASH_TYPE__C
+        identifier: WASH_TYPE__C
+        description: Source table for wash type configurations
+      - name: ADD_ON
+        identifier: ADD_ON
+        description: Source table for add-on service definitions
+      - name: MERCHANDISE
+        identifier: MERCHANDISE
+        description: Source table for merchandise items
+      - name: PICKLIST_VALUE
+        identifier: PICKLIST_VALUE
+        description: Source table for picklist value mappings
+      - name: WASH_TYPE_ADD_ON_AVAILABLE
+        identifier: WASH_TYPE_ADD_ON_AVAILABLE
+        description: Source table for wash type add-on availability
+      - name: REMOTE_WASHES
+        identifier: REMOTE_WASHES
+        description: Source table for remote wash transactions
+      - name: STORED_WASH
+        identifier: STORED_WASH
+        description: Source table for stored wash records
+      - name: MOBILE_USER_ACTIVITY_WASH_TYPE_ADD_ON_AVAILABLE
+        identifier: MOBILE_USER_ACTIVITY_WASH_TYPE_ADD_ON_AVAILABLE
+        description: Source table for mobile user activity add-on availability
+      - name: MOBILE_USER_ACTIVITY
+        identifier: MOBILE_USER_ACTIVITY
+        description: Source table for mobile user activity logs
+      - name: ATTENDANT_MODE_CONFIGURATIONS
+        identifier: ATTENDANT_MODE_CONFIGURATIONS
+        description: Source table for attendant mode configuration settings
+      - name: TENANT__C
+        identifier: TENANT__C
+        description: Source table for tenant master records
+      - name: MOBILEUSER__C
+        identifier: MOBILEUSER__C
+        description: Source table for mobile user master records
       - name: CONTACT
-        identifier: CONTACT # actual name of referenced table in database
-        description: test
+        identifier: CONTACT
+        description: Source table for user contact information
+      - name: CONTACT_PHONE_NUMBER
+        identifier: CONTACT_PHONE_NUMBER
+        description: Source table for user phone number
+      - name: EMPLOYEE
+        identifier: EMPLOYEE
+        description: Source table for employee users
+      - name: VEHICLE_RFID
+        identifier: VEHICLE_RFID
+        description: The GENERAL.VEHICLE_RFID table stores RFID tag information associated with vehicles, including identifiers for the tenant, vehicle, and integration, as well as metadata about record creation and modification.
+      - name: VEHICLE_HISTORY
+        identifier: VEHICLE_HISTORY
+        description: The GENERAL.VEHICLE_HISTORY table records historical data related to vehicles, including identifiers, license plate details, event types, and metadata such as creation and modification timestamps and user IDs.
+      - name: SUBSCRIPTION_CANCELLATION__C
+        identifier: SUBSCRIPTION_CANCELLATION__C
+        description: The GENERAL.SUBSCRIPTION_CANCELLATION__C table captures details of subscription cancellations, including reasons, related account and subscription identifiers, timestamps, and cancellation status, associated with specific tenants and vehicles.
 
-  - name: REPORTING #first identifier used by DBT
-    schema: REPORTING #schema within snowflake
+  - name: REPORTING
+    schema: REPORTING
     database: AMP_DB #database within snowflake
     tables:
-
-      - name: STRIPE_INVOICES # table name as it will be used by dbt
-        identifier: STRIPE_INVOICES # actual name of referenced table in database
-        description: test
-      - name: STRIPE_INVOICE_LINE_ITEMS
-        identifier: STRIPE_INVOICE_LINE_ITEMS # actual name of referenced table in database
-        description: test
       - name: TENANT_HIERARCHY
         identifier: TENANT_HIERARCHY # actual name of referenced table in database
         description: test
+      - name: STRIPE_INVOICE_LINE_ITEMS
+        identifier: STRIPE_INVOICE_LINE_ITEMS
+        description: Source table for Stripe invoice line item details
+      - name: STRIPE_INVOICES
+        identifier: STRIPE_INVOICES
+        description: Source table for Stripe invoice header records
+      - name: STRIPE_PRICES
+        identifier: STRIPE_PRICES
+        description: Source table for Stripe price configurations
+      - name: STRIPE_PRODUCTS
+        identifier: STRIPE_PRODUCTS
+        description: Source table for Stripe product metadata
+      - name: STRIPE_INVOICE_STRIPE_TAX_RATE
+        identifier: STRIPE_INVOICE_STRIPE_TAX_RATE
+        description: Source table mapping invoices to Stripe tax rates
+      - name: STRIPE_TAX_RATES
+        identifier: STRIPE_TAX_RATES
+        description: Source table for Stripe tax rate definitions
+      - name: STRIPE_SUBSCRIPTIONS
+        identifier: STRIPE_SUBSCRIPTIONS
+        description: Source table for Stripe subscription records
+      - name: STRIPE_CUSTOMER_BALANCE_TRANSACTIONS
+        identifier: STRIPE_CUSTOMER_BALANCE_TRANSACTIONS
+        description: Source table for customer balance transactions in Stripe
+      - name: STRIPE_BALANCE_TRANSACTIONS
+        identifier: STRIPE_BALANCE_TRANSACTIONS
+        description: Source table for Stripe balance transaction entries
+      - name: STRIPE_PAYMENTS
+        identifier: STRIPE_PAYMENTS
+        description: Source table for Stripe payment events
+      - name: STRIPE_REFUNDS
+        identifier: STRIPE_REFUNDS
+        description: Source table for Stripe refund records
+      - name: STRIPE_DISPUTES
+        identifier: STRIPE_DISPUTES
+        description: Source table for Stripe dispute events
+      - name: STRIPE_BALANCE_TRANSACTION_PAYOUTS
+        identifier: STRIPE_BALANCE_TRANSACTION_PAYOUTS
+        description: Source table for Stripe payout transaction details
+      - name: STRIPE_CHARGES
+        identifier: STRIPE_CHARGES
+        description: Source table for Stripe charge events
+      - name: WORLDNET_TRANSACTIONS
+        identifier: WORLDNET_TRANSACTIONS
+        description: Source table for WorldNet transaction logs
+      - name: STRIPE_PRICE_TIERS
+        identifier: STRIPE_PRICE_TIERS
+        description: The REPORTING.STRIPE_PRICE_TIERS table contains tiered pricing details for Stripe, including flat and unit amounts, tier limits, and timestamps, linked to a specific tenant and price ID.
+      - name: STRIPE_SUBSCRIPTION_HISTORIES
+        identifier: STRIPE_SUBSCRIPTION_HISTORIES
+        description: The REPORTING.STRIPE_SUBSCRIPTION_HISTORIES table tracks historical changes in Stripe subscription data, including status updates, billing cycles, cancellation and pause details, price changes, and associated promotions, for each tenant and subscription.
+      - name: STRIPE_COUPONS
+        identifier: STRIPE_COUPONS
+        description: The REPORTING.STRIPE_COUPONS table stores details about Stripe coupons, including discount types and amounts, redemption limits, duration, and metadata, linked to tenants and optionally associated with administrative or automatic cancellation settings.
+      - name: STRIPE_DISCOUNTS
+        identifier: STRIPE_DISCOUNTS
+        description: The REPORTING.STRIPE_DISCOUNTS table records information on discounts applied in Stripe, including associated coupons, subscriptions, invoices, and customers, with details on discount types, durations, and metadata for each tenant.
+      - name: STRIPE_SUBSCRIPTION_ITEM_HISTORIES
+        identifier: STRIPE_SUBSCRIPTION_ITEM_HISTORIES
+        description: The REPORTING.STRIPE_SUBSCRIPTION_ITEM_HISTORIES table logs historical changes to individual Stripe subscription items, including price IDs, quantities, and tax rates, for each tenant and subscription item.
 
-  - name: INTERNAL #first identifier used by DBT
-    schema: INTERNAL #schema within snowflake
+  - name: STRIPE
+    schema: STRIPE
     database: AMP_DB #database within snowflake
     tables:
+      - name: PRODUCT_PRICE
+        identifier: PRODUCT_PRICE
+        description: Source table for Stripe product price mappings
+      - name: PRODUCT
+        identifier: PRODUCT
+        description: Source table for Stripe product definitions
 
-      - name: LOCATION_HIERARCHY # table name as it will be used by dbt
-        identifier: LOCATION_HIERARCHY # actual name of referenced table in database
-        description: test
+  - name: INTERNAL
+    schema: INTERNAL
+    database: AMP_DB #database within snowflake
+    tables:
+      - name: LINE_ITEM_TO_PRODUCT_ID_MAPPING
+        identifier: LINE_ITEM_TO_PRODUCT_ID_MAPPING
+        description: Source table mapping invoice line items to product IDs
+      - name: LOCATION_HIERARCHY
+        identifier: LOCATION_HIERARCHY
+        description: Source table for hierarchical location relationships
+      - name: LOCATION_PREFERENCES
+        identifier: LOCATION_PREFERENCES
+        description: Source table for location preference overrides
+      - name: LOCATION_OVERRIDES
+        identifier: LOCATION_OVERRIDES
+        description: Source table for subscription location overrides
+      - name: TOKEN_MIGRATION_PLAN_LOCATION
+        identifier: TOKEN_MIGRATION_PLAN_LOCATION
+        description: Source table for token migration plan locations
+      - name: CREDITS_USED_ON_GIFT_CARDS
+        identifier: CREDITS_USED_ON_GIFT_CARDS
+        description: Source table for gift card credit usage details
+      - name: ELIGIBLE_PAYOUT_DAYS
+        identifier: ELIGIBLE_PAYOUT_DAYS
+        description: Source table listing payout-eligible days
+      - name: UTC_TIME_ADJUSTMENT_TABLE
+        identifier: UTC_TIME_ADJUSTMENT_TABLE
+        description: Source table for UTC adjustment rules
+      - name: LEGACY_REACTIVATION_CHECK
+        identifier: LEGACY_REACTIVATION_CHECK
+        description: The INTERNAL.LEGACY_REACTIVATION_CHECK table stores data used to verify legacy vehicle reactivations, identified by tenant ID and license plate number.
+
+
+  - name: VIEWS
+    schema: VIEWS
+    database: AMP_DB #database within snowflake
+    tables:
+      - name: DYNAMIC_USERS
+        identifier: DYNAMIC_USERS
+        description: Source view for consolidated user profiles
+      - name: CREDIT_USAGE_DETAIL
+        identifier: CREDIT_USAGE_DETAIL
+        description: Source view for detailed credit usage transactions
+      - name: CREDIT_BALANCE_TRANSACTIONS
+        identifier: CREDIT_BALANCE_TRANSACTIONS
+        description: Source view for credit balance transaction history
+      - name: PAYMENT_TO_INVOICE_MAPPING
+        identifier: PAYMENT_TO_INVOICE_MAPPING
+        description: Source view mapping payments to invoices
+
+  - name: CONSTANTS
+    schema: CONSTANTS
+    database: AMP_DB #database within snowflake
+    tables:
+      - name: STRIPE_INTERVAL
+        identifier: STRIPE_INTERVAL
+        description: Source table for Stripe subscription interval constants

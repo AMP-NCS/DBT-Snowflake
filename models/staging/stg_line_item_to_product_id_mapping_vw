@@ -1,0 +1,25 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        TENANT_ID,
+        INVOICE_LINE_ITEM_ID,
+        PRODUCT_ID,
+        PRODUCT_CATEGORY
+    from {{ source('INTERNAL', 'LINE_ITEM_TO_PRODUCT_ID_MAPPING') }}
+),
+
+renamed_cte as (
+    select
+        TENANT_ID                   as tenant_id,
+        INVOICE_LINE_ITEM_ID        as invoice_line_item_id,
+        PRODUCT_ID                  as product_id,
+        PRODUCT_CATEGORY            as product_category
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

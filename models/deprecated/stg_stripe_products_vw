@@ -1,0 +1,40 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        TENANT__R__EXTERNAL_ID__C,
+        PRODUCT_ID,
+        DELETED,
+        ACTIVE,
+        NAME,
+        DESCRIPTION,
+        PRODUCT_CREATED,
+        CREATED,
+        LAST_MODIFIED,
+        IS_AMP
+    from {{ source('REPORTING','STRIPE_PRODUCTS') }}
+),
+
+renamed_cte as (
+    select
+        PRODUCT_ID                                     as stripe_product_id,
+        TENANT__R__EXTERNAL_ID__C                      as tenant_id,
+        DELETED                                         as deleted_flg,
+        ACTIVE                                          as active_flg,
+        NAME                                            as name,
+        DESCRIPTION                                     as description,
+        PRODUCT_CREATED                                 as product_created_datetime,
+        cast(PRODUCT_CREATED as date)                   as product_created_date,
+        CREATED                                         as created_datetime,
+        cast(CREATED as date)                           as created_date,
+        LAST_MODIFIED                                   as last_modified_datetime,
+        cast(LAST_MODIFIED as date)                     as last_modified_date,
+        IS_AMP                                          as is_amp_flg
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

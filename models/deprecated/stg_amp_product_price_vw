@@ -1,0 +1,44 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        PRODUCT_ID,
+        STRIPE_PRICE_ID,
+        METADATA,
+        ACTIVE,
+        TENANT__R__EXTERNAL_ID__C,
+        CREATED_AT,
+        ID,
+        ORDINAL,
+        INTERVAL_COUNT,
+        INTERVAL_TYPE,
+        PARENT_PRODUCT_PRICE_ID,
+        LAST_MODIFIED
+    from {{ source('STRIPE','PRODUCT_PRICE') }}
+),
+
+renamed_cte as (
+    select
+        ID                                  as amp_product_price_id,
+        PRODUCT_ID                          as amp_product_id,
+        STRIPE_PRICE_ID                     as stripe_price_id,
+        METADATA                            as metadata,
+        PARSE_JSON(METADATA):PriceGroupId   as price_group_id,
+        ACTIVE                              as active_flg,
+        TENANT__R__EXTERNAL_ID__C           as tenant_id,
+        CREATED_AT                          as created_at_datetime,
+        cast(CREATED_AT as date)            as created_at_date,
+        ORDINAL                             as ordinal,
+        INTERVAL_COUNT                      as interval_count,
+        INTERVAL_TYPE                       as interval_type,
+        PARENT_PRODUCT_PRICE_ID             as parent_product_price_id,
+        LAST_MODIFIED                       as last_modified_datetime,
+        cast(LAST_MODIFIED as date)         as last_modified_date
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

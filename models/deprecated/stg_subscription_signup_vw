@@ -1,0 +1,49 @@
+--DBT Model
+--2025-05-23 Original model created by Patrick Callahan
+
+{{ config(materialized='view') }}
+
+WITH source_cte AS (
+    SELECT
+        id,
+        tenant__r__external_id__c,
+        created,
+        last_modified,
+        closest_location_external_id,
+        latitude,
+        longitude,
+        customer_user_external_id,
+        subscription_id,
+        price_id,
+        created_by_id,
+        last_modified_by_id
+    FROM {{ source('GENERAL', 'SUBSCRIPTION_SIGN_UP') }}
+),
+
+renamed_cte AS (
+    SELECT
+        id                          AS subscription_sign_up_id,
+        tenant__r__external_id__c   AS tenant_id,
+
+        created                     AS created_datetime,
+        cast(created AS date)       AS created_date,
+
+        last_modified               AS last_modified_datetime,
+        cast(last_modified AS date) AS last_modified_date,
+
+        closest_location_external_id,
+        latitude,
+        longitude,
+        customer_user_external_id   AS user_id,
+        subscription_id,
+        price_id,
+        created_by_id,
+        last_modified_by_id
+    FROM source_cte
+),
+
+final_cte AS (
+    SELECT * FROM renamed_cte
+)
+
+SELECT * FROM final_cte

@@ -1,0 +1,33 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        TENANT__R__EXTERNAL_ID__C,
+        CREATED,
+        LAST_MODIFIED,
+        ID,
+        INVOICE_ID,
+        INVOICE_LINE_ITEM_ID,
+        TAX_RATE_ID
+    from {{ source('REPORTING','STRIPE_INVOICE_STRIPE_TAX_RATE') }}
+),
+
+renamed_cte as (
+    select
+        TENANT__R__EXTERNAL_ID__C    as tenant_id,
+        CREATED                      as created_datetime,
+        to_date(CREATED)             as created_date,
+        LAST_MODIFIED                as last_modified_datetime,
+        to_date(LAST_MODIFIED)       as last_modified_date,
+        ID                           as stripe_invoice_stripe_tax_rate_id,
+        INVOICE_ID                   as invoice_id,
+        INVOICE_LINE_ITEM_ID         as invoice_line_item_id,
+        TAX_RATE_ID                  as tax_rate_id
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte
