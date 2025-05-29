@@ -1,0 +1,49 @@
+--DBT Model
+--2025-05-23 Original model created by Patrick Callahan
+
+{{ config(materialized='view') }}
+
+WITH source_cte AS (
+    SELECT
+        id,
+        tenant__r__external_id__c,
+        amp_user_id,
+        stripe_subscription_id,
+        pos_plan_id,
+        created,
+        last_modified,
+        amp_vehicle_id,
+        migration_complete,
+        created_by_id,
+        last_modified_by_id,
+        pos_plan_imported_id
+    FROM {{ source('GENERAL', 'POS_PLAN_MIGRATED') }}
+),
+
+renamed_cte AS (
+    SELECT
+        id                          AS pos_plan_migrated_id,
+        tenant__r__external_id__c   AS tenant_id,
+        amp_user_id,
+        stripe_subscription_id,
+        pos_plan_id,
+
+        created                     AS created_datetime,
+        cast(created AS date)       AS created_date,
+
+        last_modified               AS last_modified_datetime,
+        cast(last_modified AS date) AS last_modified_date,
+
+        amp_vehicle_id,
+        migration_complete          AS migration_complete_flg,
+        created_by_id,
+        last_modified_by_id,
+        pos_plan_imported_id
+    FROM source_cte
+),
+
+final_cte AS (
+    SELECT * FROM renamed_cte
+)
+
+SELECT * FROM final_cte

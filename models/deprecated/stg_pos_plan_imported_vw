@@ -1,0 +1,98 @@
+--DBT Model
+--2025-05-23 Original model created by Patrick Callahan
+
+{{ config(materialized='view') }}
+
+WITH source_cte AS (
+    SELECT
+        id,
+        tenant__r__external_id__c,
+        pos_plan_id,
+        pos_customer_id,
+        amp_price_id,
+        license_plate_number,
+        license_plate_state,
+        rfid,
+        next_billing_date,
+        pos_system,
+        pos_location,
+        pos_plan_name,
+        created,
+        last_modified,
+        canceled_by_amp,
+        canceled_by_amp_failed,
+        canceled,
+        canceled_by_amp_error,
+        created_by_id,
+        last_modified_by_id,
+        integration_id,
+        canceled_checked_by_amp,
+        credit_card_ending_digits,
+        canceled_by_amp_warning,
+        canceled_checked_by_amp_failed,
+        canceled_checked_by_amp_error,
+        comments,
+        contact_id,
+        pos_customer_imported_id,
+        is_prepaid_plan,
+        cancel_check_by_amp_allowed,
+        amp_legacy_plan_id
+    FROM {{ source('GENERAL', 'POS_PLAN_IMPORTED') }}
+),
+
+renamed_cte AS (
+    SELECT
+        id                                    AS pos_plan_imported_id,
+        tenant__r__external_id__c             AS tenant_id,
+        pos_plan_id,
+        pos_customer_id,
+        amp_price_id,
+        license_plate_number,
+        license_plate_state,
+        rfid,
+
+        next_billing_date                     AS next_billing_datetime,
+        cast(next_billing_date AS date)       AS next_billing_date,
+
+        pos_system,
+        pos_location                          AS pos_location_code,
+        pos_plan_name,
+
+        created                               AS created_datetime,
+        cast(created AS date)                 AS created_date,
+
+        last_modified                         AS last_modified_datetime,
+        cast(last_modified AS date)           AS last_modified_date,
+
+        canceled_by_amp                       AS canceled_by_amp_flg,
+        canceled_by_amp_failed                AS canceled_by_amp_failed_flg,
+
+        canceled                              AS canceled_datetime,
+        cast(canceled AS date)                AS canceled_date,
+
+        canceled_by_amp_error,
+        created_by_id,
+        last_modified_by_id,
+        integration_id,
+
+        canceled_checked_by_amp               AS canceled_checked_by_amp_datetime,
+        cast(canceled_checked_by_amp AS date) AS canceled_checked_by_amp_date,
+
+        credit_card_ending_digits,
+        canceled_by_amp_warning,
+        canceled_checked_by_amp_failed,
+        canceled_checked_by_amp_error,
+        comments,
+        contact_id,
+        pos_customer_imported_id,
+        is_prepaid_plan                       AS is_prepaid_plan_flg,
+        cancel_check_by_amp_allowed           AS cancel_check_by_amp_allowed_flg,
+        amp_legacy_plan_id
+    FROM source_cte
+),
+
+final_cte AS (
+    SELECT * FROM renamed_cte
+)
+
+SELECT * FROM final_cte

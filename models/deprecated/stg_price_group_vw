@@ -1,0 +1,39 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        ID,
+        TENANT__R__EXTERNAL_ID__C,
+        CREATED,
+        LAST_MODIFIED,
+        NAME,
+        DESCRIPTION,
+        ACTIVE,
+        IS_TAXABLE,
+        CREATED_BY_ID,
+        LAST_MODIFIED_BY_ID
+    from {{ source('GENERAL','PRICE_GROUP') }}
+),
+
+renamed_cte as (
+    select
+        ID                                         as price_group_id,
+        TENANT__R__EXTERNAL_ID__C                  as tenant_id,
+        CREATED                                    as created_datetime,
+        date(CREATED)                              as created_date,
+        LAST_MODIFIED                              as last_modified_datetime,
+        date(LAST_MODIFIED)                        as last_modified_date,
+        NAME                                       as name,
+        DESCRIPTION                                as description,
+        ACTIVE                                     as active_flg,
+        IS_TAXABLE                                 as is_taxable_flg,
+        CREATED_BY_ID                              as created_by_id,
+        LAST_MODIFIED_BY_ID                        as last_modified_by_id
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

@@ -1,0 +1,61 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        TENANT__R__EXTERNAL_ID__C,
+        PRICE_ID,
+        DELETED,
+        PRODUCT_ID,
+        ACTIVE,
+        TYPE,
+        BILLING_SCHEME,
+        TAX_BEHAVIOR,
+        NICKNAME,
+        UNIT_AMOUNT,
+        RECURRING_AGGREGATE_USAGE,
+        RECURRING_INTERVAL,
+        RECURRING_INTERVAL_COUNT,
+        RECURRING_USAGE_TYPE,
+        TIERS_MODE,
+        PRICE_CREATED,
+        CREATED,
+        LAST_MODIFIED,
+        PRICE_TYPE,
+        PRICE_GROUP_ID
+    from {{ source('REPORTING','STRIPE_PRICES') }}
+),
+
+renamed_cte as (
+    select
+        PRICE_ID                                      as stripe_price_id,
+        PRODUCT_ID                                    as stripe_product_id,       
+        TENANT__R__EXTERNAL_ID__C                     as tenant_id,
+        DELETED                                        as deleted_flg,
+        ACTIVE                                         as active_flg,
+        TYPE                                           as type,
+        BILLING_SCHEME                                 as billing_scheme,
+        TAX_BEHAVIOR                                   as tax_behavior,
+        NICKNAME                                       as nickname,
+        UNIT_AMOUNT                                    as unit_amount_cents,
+        UNIT_AMOUNT/100                                as unit_amt,
+        RECURRING_AGGREGATE_USAGE                      as recurring_aggregate_usage,
+        RECURRING_INTERVAL                             as recurring_interval,
+        RECURRING_INTERVAL_COUNT                       as recurring_interval_count,
+        RECURRING_USAGE_TYPE                           as recurring_usage_type,
+        TIERS_MODE                                     as tiers_mode,
+        PRICE_CREATED                                  as price_created_datetime,
+        cast(PRICE_CREATED as date)                    as price_created_date,
+        CREATED                                        as created_datetime,
+        cast(CREATED as date)                          as created_date,
+        LAST_MODIFIED                                  as last_modified_datetime,
+        cast(LAST_MODIFIED as date)                    as last_modified_date,
+        PRICE_TYPE                                     as price_type,
+        PRICE_GROUP_ID                                 as price_group_id
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

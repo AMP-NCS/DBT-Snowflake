@@ -1,0 +1,53 @@
+{{ config(materialized='view') }}
+
+with source_cte as (
+    select
+        STRIPE_PRODUCT_ID,
+        DESCRIPTION,
+        MONTHLY_LIMIT,
+        DAILY_LIMIT,
+        ACTIVE,
+        METADATA,
+        TENANT__R__EXTERNAL_ID__C,
+        CREATED_AT,
+        ID,
+        DISPLAY_BANNER,
+        BANNER_TEXT,
+        ORDINAL,
+        APP_DESCRIPTION,
+        NAME,
+        LAST_MODIFIED,
+        IS_UPSELL,
+        KIOSK_IMAGE_URL
+    from {{ source('STRIPE','PRODUCT') }}
+),
+
+renamed_cte as (
+    select
+        stripe_product_id                  as stripe_product_id,
+        description                        as description,
+        monthly_limit                      as monthly_limit,
+        daily_limit                        as daily_limit,
+        active                             as active_flg,
+        metadata                           as metadata,
+        TENANT__R__EXTERNAL_ID__C          as tenant_id,
+        CREATED_AT                         as created_datetime,
+        cast(CREATED_AT as date)           as created_date,
+        ID                                 as record_id,
+        DISPLAY_BANNER                     as display_banner_flg,
+        banner_text                        as banner_text,
+        ordinal                            as ordinal,
+        app_description                    as app_description,
+        name                               as name,
+        LAST_MODIFIED                      as last_modified_datetime,
+        cast(LAST_MODIFIED as date)        as last_modified_date,
+        IS_UPSELL                          as is_upsell_flg,
+        kiosk_image_url                    as kiosk_image_url
+    from source_cte
+),
+
+final_cte as (
+    select * from renamed_cte
+)
+
+select * from final_cte

@@ -1,0 +1,36 @@
+{{ config(materialized='view') }}
+
+select
+    b.tenant_id,
+    b.invoice_id,
+    b.invoice_line_item_id,
+    coalesce(b.raw_product_id, pm.mapped_product_id)                                          as product_id,
+    coalesce(b.raw_product_category, pm.mapped_product_category)                              as product_category,
+    p.product_name                                                                          as product_name,
+    pg.price_group                                                                          as price_group,
+    pr.price_nickname                                                                       as price_nickname,
+    pr.recurring_interval_count || ' ' || upper(pr.recurring_interval)
+        || case when pr.recurring_interval_count > 1 then 's' else '' end                     as plan_term,
+    case when coalesce(s.is_amp_flg, false) then true else false end                         as is_amp_flg,
+    case when parse_json(sp.metadata):TaxRateIdOverride is not null then true else false end as is_tax_exempt_flg,
+    b.line_item_description                                                                 as line_item_description,
+    b.tax_inclusive_flg                                                                     as tax_inclusive_flg,
+    b.tax_amt                                                                               as tax_amt,
+    b.discount_amt                                                                          as discount_amt,
+    b.amount_amt                                                                            as amount_amt,
+    b.quantity                                                                              as quantity,
+    b.period_start_datetime                                                                 as period_start_datetime,
+    b.period_start_date                                                                     as period_start_date,
+    b.period_end_datetime                                                                   as period_end_datetime,
+    b.period_end_date                                                                       as period_end_date,
+    tax.tax_jurisdiction                                                                     as tax_jurisdiction,
+    tax.tax_rate                                                                            as tax_rate
+
+from {{ ref('stg_base_items') }}                as b
+left join {{ ref('stg_product_mapping') }}      as pm on b.invoice_line_item_id = pm.invoice_line_item_id
+left join {{ ref('stg_price_join') }}           as pr on b.price_id            = pr.price_id
+left join {{ ref('stg_product_join') }}         as p  on pr.price_product_id    = p.product_id
+left join {{ ref('stg_stripe_product') }}       as sp on p.product_id          = sp.stripe_product_id
+left join {{ ref('stg_price_groups') }}         as pg on pr.price_id            = pg.stripe_price_id
+left join {{ ref('stg_product_join') }}         as s  on pr.price_product_id    = s.product_id
+left join {{ ref('stg_tax_mapping') }}          as tax on b.invoice_line_item_id = tax.invoice_line_item_id
