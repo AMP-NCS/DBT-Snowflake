@@ -124,6 +124,9 @@ sources:
       - name: SUBSCRIPTION_CANCELLATION__C
         identifier: SUBSCRIPTION_CANCELLATION__C
         description: The GENERAL.SUBSCRIPTION_CANCELLATION__C table captures details of subscription cancellations, including reasons, related account and subscription identifiers, timestamps, and cancellation status, associated with specific tenants and vehicles.
+      - name: VEHICLE
+        identifier: VEHICLE
+        description: The GENERAL.VEHICLE table stores detailed information about vehicles, including identifiers, license details, status, subscription data, and metadata for integration and tracking.
 
   - name: REPORTING
     schema: REPORTING
