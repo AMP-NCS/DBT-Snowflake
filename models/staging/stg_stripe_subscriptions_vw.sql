@@ -107,6 +107,25 @@ imported AS (
     FROM {{ source('GENERAL', 'POS_PLAN_IMPORTED') }}
 ),
 
+token_migration AS (
+    SELECT
+        subscription_id,
+        pos_plan_id,
+        tenant_id,
+        location_id
+    FROM {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }}
+),
+
+vehicle AS (
+    SELECT
+        subscription_id,
+        license_plate_state,
+        license_plate_number,
+        CONCAT(vehicle.license_plate_number,',',vehicle.license_plate_state) AS license_plate_id,
+        tenant__r__external_id__c
+    FROM {{ source('GENERAL', 'VEHICLE') }}
+),
+
 renamed_cte AS (
     SELECT
         source_cte.tenant__r__external_id__c     AS tenant_id,
@@ -179,16 +198,23 @@ renamed_cte AS (
 
         loc_override.override_location           AS override_location_id,
 
-        sub_signups.closest_location_external_id AS closest_location_id,
-
-        imported.pos_location                   AS migrated_location_cd,
-
-        created_by_admin_id,    
-
+        sub_signups.subscription_id              AS signup_subscription_id,
+        sub_signups.closest_location_external_id AS signup_closest_location_id,
         CASE
             WHEN sub_signups.created_by_id <> sub_signups.customer_user_external_id
                 THEN created_by_id
-        END                                      AS sign_up_by_user_id
+        END                                      AS sign_up_by_user_id,
+
+        migrated.stripe_subscription_id         AS migrated_subscription_id,
+        imported.pos_location                   AS migrated_location_cd,
+        imported.TENANT__R__EXTERNAL_ID__C      AS migrated_tenant_id,
+
+
+        token_migration.subscription_id         AS token_migration_subscription_id,
+
+        created_by_admin_id,
+
+        vehicle.license_plate_id
 
     FROM source_cte
 
@@ -204,6 +230,13 @@ renamed_cte AS (
         LEFT JOIN imported 
             ON migrated.pos_plan_id = imported.pos_plan_id
             AND migrated.tenant__r__external_id__c = imported.tenant__r__external_id__c
+
+        LEFT JOIN token_migration
+            ON imported.pos_plan_id = token_migration.pos_plan_id
+            AND imported.tenant__r__external_id__c = token_migration.tenant_id
+
+        LEFT JOIN vehicle
+            ON source_cte.subscription_id = vehicle.subscription_id
 ),
 
 final_cte AS (
