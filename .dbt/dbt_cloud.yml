@@ -1,0 +1,12 @@
+version: "1"
+context:
+  active-host: "zb660.us1.dbt.com"
+  active-project: "70471823467167"
+projects:
+  - project-name: "AMP_Snowflake"
+    project-id: "70471823467167"
+    account-name: "AMP Memberships"
+    account-id: "70471823459364"
+    account-host: "zb660.us1.dbt.com"
+    token-name: "cloud-cli-1089"
+    token-value: "dbtu_5JjaldMKCnnO4jEp-kGTW8EW8GrDbsMoMKcIUK4B162Y77_x_M"
