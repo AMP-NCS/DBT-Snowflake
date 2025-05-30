@@ -37,7 +37,7 @@ WITH source_cte AS (
 --EXCLUDE INCOMPLETE STATUS TYPES AS THESE WERE NEVER TRULY CREATED
     WHERE status NOT IN ('incomplete_expired', 'incomplete') 
 --EXCLUDE ANY TOKEN PLANS AS THEY WILL BE CAPTURED IN THE NEXT SUBQUERY (IF NOT MIGRATED, IN WHICH CASE WE WANT TO IGNORE THEM)
-    AND NOT EXISTS (
+    AND EXISTS (
         SELECT 1
             FROM {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} t
             WHERE t.subscription_id = sub.subscription_id)
@@ -126,7 +126,7 @@ SELECT
     imported.pos_location                   AS migrated_location_cd,
     imported.TENANT__R__EXTERNAL_ID__C      AS migrated_tenant_id,
 
-    -- token_migration.subscription_id         AS token_migration_subscription_id,
+    token_migration.subscription_id         AS token_migration_subscription_id,
 
     created_by_admin_id,
 
@@ -147,9 +147,9 @@ LEFT JOIN {{ source('GENERAL', 'POS_PLAN_IMPORTED') }} AS imported
     ON migrated.pos_plan_id = imported.pos_plan_id
     AND migrated.tenant__r__external_id__c = imported.tenant__r__external_id__c
 
--- LEFT JOIN {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} AS token_migration
---     ON imported.pos_plan_id = token_migration.pos_plan_id
---     AND imported.tenant__r__external_id__c = token_migration.tenant_id
+LEFT JOIN {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} AS token_migration
+    ON imported.pos_plan_id = token_migration.pos_plan_id
+    AND imported.tenant__r__external_id__c = token_migration.tenant_id
 
 LEFT JOIN {{ source('GENERAL', 'VEHICLE') }} AS vehicle
     ON source_cte.subscription_id = vehicle.subscription_id
