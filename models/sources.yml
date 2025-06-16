@@ -195,6 +195,9 @@ sources:
       - name: STRIPE_SUBSCRIPTION_ITEM_HISTORIES
         identifier: STRIPE_SUBSCRIPTION_ITEM_HISTORIES
         description: The REPORTING.STRIPE_SUBSCRIPTION_ITEM_HISTORIES table logs historical changes to individual Stripe subscription items, including price IDs, quantities, and tax rates, for each tenant and subscription item.
+      - name: STRIPE_SUBSCRIPTION_ITEMS
+        identifier: STRIPE_SUBSCRIPTION_ITEMS
+        description: Contains item-level details for each Stripe subscription, including subscription item IDs, associated price IDs, quantities, and relevant metadata for billing and product tracking.
 
   - name: STRIPE
     schema: STRIPE
