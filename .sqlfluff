@@ -14,7 +14,7 @@ project_dir = .
 indent_unit = space
 tab_space_size = 4
 indented_joins = true
-indented_ctes = false
+indented_ctes = true
 indentation_policy = aligned
 
 [sqlfluff:rules]
@@ -25,26 +25,103 @@ single_table_references = consistent
 capitalisation_policy = upper
 
 [sqlfluff:rules:capitalisation.identifiers]
-capitalisation_policy = upper
+capitalisation_policy = lower
 
 [sqlfluff:rules:capitalisation.functions]
-capitalisation_policy = lower
+capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.types]
+capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = upper
+
+[sqlfluff:rules:aliasing.table]
+aliasing = explicit
 
 [sqlfluff:rules:aliasing.column]
 aliasing = explicit
 alias_required = true
 alias_name_policy = lower
 
-[sqlfluff:rules:references.keywords]
-unindent_clauses = join, else, when, end
+[sqlfluff:rules:aliasing.length]
+min_alias_length = 3
+
+[sqlfluff:rules:ambiguous.join]
+fully_qualify_join_types = both
+
+[sqlfluff:rules:ambiguous.column_references]
+group_by_and_order_by_style = consistent
+
+[sqlfluff:rules:convention.select_trailing_comma]
+select_clause_trailing_comma = forbid
+
+[sqlfluff:rules:convention.count_rows]
+prefer_count_1 = false
+prefer_count_0 = false
+
+[sqlfluff:rules:convention.terminator]
+multiline_newline = true
+
+[sqlfluff:rules:layout.commas]
+line_position = trailing
 
 [sqlfluff:rules:layout.select_targets]
+wildcard_policy = single
 forbid_except = none
+
+[sqlfluff:rules:layout.long_lines]
+ignore_comment_lines = true
+ignore_comment_clauses = true
+
+[sqlfluff:rules:layout.spacing]
+touch_line_break = false
+
+[sqlfluff:rules:references.keywords]
+unindent_clauses = join,else,when,end
 
 [sqlfluff:rules:structure.subquery]
 prefer_new_line = true
+
+[sqlfluff:layout:type:comma]
+line_position = trailing
+spacing_before = touch
+spacing_after = single
+
+[sqlfluff:layout:type:binary_operator]
+spacing_before = single
+spacing_after = single
+
+[sqlfluff:layout:type:comparison_operator]
+spacing_before = single
+spacing_after = single
+
+[sqlfluff:layout:type:assignment_operator]
+spacing_before = single
+spacing_after = single
 
 [sqlfluff:layout:type:alias_expression]
 spacing_before = align
 align_within = select_clause
 align_scope = file
+
+[sqlfluff:layout:type:casting_operator]
+spacing_before = touch
+spacing_after = touch
+
+[sqlfluff:layout:type:function_name]
+spacing_after = touch
+
+[sqlfluff:layout:type:bracket]
+spacing_before = touch
+spacing_after = touch
+
+[sqlfluff:layout:type:start_bracket]
+spacing_after = touch
+
+[sqlfluff:layout:type:end_bracket]
+spacing_before = touch
+
+[sqlfluff:layout:type:semicolon]
+spacing_before = touch
+line_position = trailing

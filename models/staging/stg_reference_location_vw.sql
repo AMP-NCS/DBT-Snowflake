@@ -1,3 +1,7 @@
+--DBT Model
+--2025-05-23 Original model created by Patrick Callahan
+--2025-06-16 PC Added a concat for location id and location cd
+
 {{ config(materialized='view') }}
 
 WITH base_locations AS (
@@ -9,7 +13,7 @@ WITH base_locations AS (
         loc.STATE__C AS state,
         loc.STREET1__C AS street1,
         loc.STREET2__C AS street2,
-        loc.LOCATION_CODE AS pos_location_code,
+        loc.LOCATION_CODE AS location_code,
         loc.TENANT__R__EXTERNAL_ID__C AS tenant_id
     FROM {{ source('GENERAL','AUTOWASHLOCATION__C') }} loc
 ),
@@ -30,8 +34,10 @@ SELECT
     base.state,
     base.street1,
     base.street2,
-    base.pos_location_code,
+    base.location_code,
     base.tenant_id,
+    CONCAT(base.tenant_id,'-',base.location_external_id) AS unique_tenant_location_id,
+    CONCAT(base.tenant_id,'-',base.location_code) AS unique_tenant_location_code,
 
     -- Add franchise flag and row-level security ID
     COALESCE(rls.ROW_LEVEL_SECURITY_ID, base.tenant_id) AS row_level_security_id,

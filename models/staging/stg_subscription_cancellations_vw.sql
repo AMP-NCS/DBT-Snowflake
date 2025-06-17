@@ -48,14 +48,16 @@ renamed_cte as (
         mobile_user__r__external_id__c as external_mobile_user_id,
 
         is_cancelled__c as is_cancelled_flg,
-        created_by_id,
+        created_by_id AS cancellation_created_by_customer_id,
         last_modified_by_id,
-        picklist_value_id
+        picklist_value_id,
+        ROW_NUMBER() OVER (PARTITION BY stripe_subscription_id__c ORDER BY id DESC) AS row_num
     from source_cte
 ),
 
 final_cte as (
     select * from renamed_cte
+     WHERE row_num = 1
 )
 
 select * from final_cte
