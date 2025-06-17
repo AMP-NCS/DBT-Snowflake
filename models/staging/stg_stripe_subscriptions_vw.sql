@@ -42,97 +42,143 @@ WITH
         WHERE sub.status NOT IN ('incomplete_expired', 'incomplete')
 
         --EXCLUDE ANY TOKEN PLANS AS THEY WILL BE CAPTURED IN THE NEXT SUBQUERY (IF NOT MIGRATED, IN WHICH CASE WE WANT TO IGNORE THEM)
-        -- AND NOT EXISTS (
-        --     SELECT 1
-        --     FROM {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} AS t
-        --     WHERE t.subscription_id = sub.subscription_id
-        -- )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} AS t
+            WHERE t.subscription_id = sub.subscription_id
+        )
 
+    ),
+
+    --used to track override locations
+    loc_override AS (
+        SELECT
+            subscription_id,
+            --    INITIAL_LOCATION AS initial_location_id, 
+            override_location AS override_location_id
+        FROM {{ source('INTERNAL','LOCATION_OVERRIDE') }}
+    ),
+
+    --used to track signup location and signup user.  only keep records where customer is not assigned to signup: created_by_id <> customer_user_external_id
+    sub_signups AS (
+        SELECT
+            id                           AS signup_id,
+            tenant__r__external_id__c    AS tenant_id,
+            closest_location_external_id AS signup_closest_location_id,
+            --    LAST_MODIFIED,
+            subscription_id,
+            --    LATITUDE,
+            --    LONGITUDE,
+            --    CUSTOMER_USER_EXTERNAL_ID,
+            created_by_id                AS signup_created_by_user_id,
+            --    PRICE_ID,
+            CAST(created AS DATE)        AS signup_created_date
+        --    LAST_MODIFIED_BY_ID
+        FROM {{ source('GENERAL', 'SUBSCRIPTION_SIGN_UP') }}
+        WHERE created_by_id <> customer_user_external_id
+    ),
+
+    migrated AS (
+        SELECT
+            migrated_plans.stripe_subscription_id,
+            imported_plans.tenant__r__external_id__c AS tenant_id,
+            imported_plans.pos_location              AS migrated_pos_location_code
+        --    token_plans.subscription_id AS token_plans_to_ignore_subscription_id
+        FROM {{ source('GENERAL', 'POS_PLAN_MIGRATED') }} AS migrated_plans
+            INNER JOIN {{ source('GENERAL', 'POS_PLAN_IMPORTED') }} AS imported_plans
+                ON
+                    migrated_plans.pos_plan_id = imported_plans.pos_plan_id
+                    AND migrated_plans.tenant__r__external_id__c = imported_plans.tenant__r__external_id__c
+    -- LEFT JOIN {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} token_plans
+    --     ON imported_plans.pos_plan_id = token_plans.pos_plan_id
+    --     AND imported_plans.tenant__r__external_id__c = token_plans.tenant_id
     )
 
 SELECT
-    source_cte.tenant__r__external_id__c                                              AS tenant_id,
-    source_cte.subscription_id                                                        AS stripe_subscription_id,
-    customer_id                                                                       AS stripe_customer_id,
+    source_cte.tenant__r__external_id__c                                                   AS tenant_id,
+    source_cte.subscription_id                                                             AS stripe_subscription_id,
+    customer_id                                                                            AS stripe_customer_id,
 
     status,
 
-    cancel_at_period_end                                                              AS cancel_at_period_end_flag,
+    cancel_at_period_end                                                                   AS cancel_at_period_end_flag,
 
     -- current_period_end                                                                AS current_period_end_datetime,
-    CAST(current_period_end AS date)                                                  AS current_period_end_date,
+    coupon_id,
 
     -- current_period_start                                                              AS current_period_start_datetime,
-    CAST(current_period_start AS date)                                                AS current_period_start_date,
-
-    -- billing_cycle_anchor                                                              AS billing_cycle_anchor_datetime,
-    CAST(billing_cycle_anchor AS date)                                                AS billing_cycle_anchor_date,
-
-    -- cancel_at                                                                         AS plan_cancel_request_datetime,
-    CAST(cancel_at AS date)                                                           AS plan_cancel_request_date,
-
-    -- canceled_at                                                                       AS plan_cancel_scheduled_for_datetime,
-    CAST(canceled_at AS date)                                                         AS plan_cancel_scheduled_for_date,
-
-    -- ended_at                                                                          AS plan_end_datetime,
-    CAST(ended_at AS date)                                                            AS plan_end_date,
-
-    -- start_date                                                                        AS plan_start_datetime,
-    CAST(start_date AS date)                                                          AS plan_start_date,
-
-    coupon_id,
     promotion_code_id,
 
+    -- billing_cycle_anchor                                                              AS billing_cycle_anchor_datetime,
     tax_rate,
 
-    -- source_cte.subscription_created                                                   AS subscription_created_datetime,
-    CAST(source_cte.subscription_created AS date)                                     AS subscription_created_date,
-
-    -- source_cte.created                                                                AS created_datetime,
-    CAST(source_cte.created AS date)                                                  AS created_date,
-
-    -- source_cte.last_modified                                                          AS last_modified_datetime,
-    CAST(source_cte.last_modified AS date)                                            AS last_modified_date,
-
+    -- cancel_at                                                                         AS plan_cancel_request_datetime,
     downgrade_price_id,
 
-    -- downgrade_expiration                                                              AS downgrade_expiration_datetime,
-    CAST(downgrade_expiration AS date)                                                AS downgrade_expiration_date,
-    CAST(IFF(downgrade_expiration >= SYSDATE(), downgrade_expiration, NULL) AS date)  AS pending_downgrade_date,
-
-    -- auto_cancel_date                                                                  AS auto_cancel_date_datetime,
-    CAST(auto_cancel_date AS date)                                                    AS auto_cancel_date,
-
+    -- canceled_at                                                                       AS plan_cancel_scheduled_for_datetime,
     source_cte.account_id,
 
-    -- pause_request_date                                                                AS pause_request_date_datetime,
-    CAST(pause_request_date AS date)                                                  AS pause_request_date,
-
-    -- pause_effective_date                                                              AS pause_effective_date_datetime,
-    CAST(pause_effective_date AS date)                                                AS pause_effective_date,
-
-    -- pause_end_date                                                                    AS pause_end_date_datetime,
-    CAST(pause_end_date AS date)                                                      AS pause_end_date,
-
+    -- ended_at                                                                          AS plan_end_datetime,
     signup_zip_code,
+
+    -- start_date                                                                        AS plan_start_datetime,
     tax_location_override_id,
 
     cancellation_details_reason,
     aaa_membership_number,
 
-    source_cte.location_id                                                            AS subscription_location_id,
+    source_cte.location_id                                                                 AS subscription_location_id,
 
-    loc_override.override_location                                                    AS override_location_id,
-    sub_signups.subscription_id                                                       AS signup_subscription_id,
-
-    sub_signups.closest_location_external_id                                          AS signup_location_id,
-    migrated.stripe_subscription_id                                                   AS migrated_subscription_id,
-
-    imported.pos_location                                                             AS migrated_location_code,
-
-    imported.tenant__r__external_id__c                                                AS migrated_tenant_id,
+    -- source_cte.subscription_created                                                   AS subscription_created_datetime,
     created_by_admin_id,
 
+    -- source_cte.created                                                                AS created_datetime,
+    loc_override.override_location_id                                                      AS override_location_id,
+
+    -- source_cte.last_modified                                                          AS last_modified_datetime,
+    sub_signups.signup_closest_location_id,
+
+    sub_signups.signup_created_by_user_id,
+
+    -- downgrade_expiration                                                              AS downgrade_expiration_datetime,
+    migrated.migrated_pos_location_code,
+    -- token_migration.subscription_id                                                        AS token_migration_subscription_id,
+
+    -- auto_cancel_date                                                                  AS auto_cancel_date_datetime,
+    CAST(current_period_end AS DATE)                                                       AS current_period_end_date,
+
+    CAST(current_period_start AS DATE)                                                     AS current_period_start_date,
+
+    -- pause_request_date                                                                AS pause_request_date_datetime,
+    CAST(billing_cycle_anchor AS DATE)                                                     AS billing_cycle_anchor_date,
+
+    -- pause_effective_date                                                              AS pause_effective_date_datetime,
+    CAST(cancel_at AS DATE)                                                                AS plan_cancel_request_date,
+
+    -- pause_end_date                                                                    AS pause_end_date_datetime,
+    CAST(canceled_at AS DATE)
+        AS plan_cancel_scheduled_for_date,
+
+    CAST(ended_at AS DATE)                                                                 AS plan_end_date,
+    CAST(start_date AS DATE)                                                               AS plan_start_date,
+
+    CAST(source_cte.subscription_created AS DATE)                                          AS subscription_created_date,
+    CAST(source_cte.created AS DATE)                                                       AS created_date,
+
+    CAST(source_cte.last_modified AS DATE)                                                 AS last_modified_date,
+    CAST(downgrade_expiration AS DATE)                                                     AS downgrade_expiration_date,
+
+    CAST(IFF(downgrade_expiration >= SYSDATE(), downgrade_expiration, NULL) AS DATE)       AS pending_downgrade_date,
+
+    CAST(auto_cancel_date AS DATE)                                                         AS auto_cancel_date,
+
+
+    CAST(pause_request_date AS DATE)                                                       AS pause_request_date,
+    CAST(pause_effective_date AS DATE)                                                     AS pause_effective_date,
+
+    CAST(pause_end_date AS DATE)                                                           AS pause_end_date,
+    CONCAT(source_cte.tenant__r__external_id__c, '-', source_cte.location_id)
+        AS subscription_unique_tenant_location_id,
     CASE
         WHEN status = 'canceled' THEN 'Canceled'
         WHEN status = 'past_due' THEN 'Past Due'
@@ -141,39 +187,29 @@ SELECT
         WHEN pause_effective_date > SYSDATE() THEN 'Pending Pause'
         WHEN cancel_at_period_end = TRUE THEN 'Pending Cancelation'
         ELSE 'Current'
-    END                                                                               AS new_status,
+    END                                                                                    AS new_status,
 
-    CONCAT(source_cte.tenant__r__external_id__c, '-', source_cte.location_id)           AS subscription_unique_tenant_location_id,
-    CONCAT(source_cte.tenant__r__external_id__c, '-', loc_override.override_location)   AS override_unique_tenant_location_id,
-    CONCAT(sub_signups.tenant__r__external_id__c, '-', closest_location_external_id)    AS signup_unique_tenant_location_id,
-    CONCAT(imported.tenant__r__external_id__c, '-', imported.pos_location)              AS migrated_unique_tenant_location_code,
+    CONCAT(source_cte.tenant__r__external_id__c, '-', loc_override.override_location_id)   AS override_unique_tenant_location_id,
+    CONCAT(sub_signups.tenant_id, '-', sub_signups.signup_closest_location_id)             AS signup_unique_tenant_location_id,
+    CONCAT(migrated.tenant_id, '-', migrated.migrated_pos_location_code)                   AS migrated_unique_tenant_location_code,
 
-    IFF(migrated.stripe_subscription_id IS NOT NULL, TRUE, FALSE)                     AS migrated_plan_flag,
+    IFF(migrated.stripe_subscription_id IS NOT NULL, TRUE, FALSE)                          AS migrated_plan_flag,
 
-    CASE
-        WHEN sub_signups.created_by_id <> sub_signups.customer_user_external_id
-            THEN sub_signups.created_by_id
-    END                                                                               AS sign_up_by_user_id,
-
-    token_migration.subscription_id         AS token_migration_subscription_id,
+    CONCAT(vehicle.license_plate_number, ',', vehicle.license_plate_state)                 AS license_plate_id
 
 
 FROM source_cte
 
-    LEFT OUTER JOIN {{ source('INTERNAL','LOCATION_OVERRIDES') }} AS loc_override
+    LEFT OUTER JOIN loc_override
         ON source_cte.subscription_id = loc_override.subscription_id
 
-    LEFT OUTER JOIN {{ source('GENERAL', 'SUBSCRIPTION_SIGN_UP') }} AS sub_signups
+    LEFT OUTER JOIN sub_signups
         ON source_cte.subscription_id = sub_signups.subscription_id
 
-    LEFT OUTER JOIN {{ source('GENERAL', 'POS_PLAN_MIGRATED') }} AS migrated
-        ON source_cte.subscription_id = migrated.stripe_subscription_id
-
-    LEFT OUTER JOIN {{ source('GENERAL', 'POS_PLAN_IMPORTED') }} AS imported
+    LEFT OUTER JOIN migrated
         ON
-            migrated.pos_plan_id = imported.pos_plan_id
-            AND migrated.tenant__r__external_id__c = imported.tenant__r__external_id__c
+            source_cte.subscription_id = migrated.stripe_subscription_id
+            AND source_cte.tenant__r__external_id__c = migrated.tenant_id
 
-    LEFT JOIN {{ source('INTERNAL', 'TOKEN_MIGRATION_PLAN_LOCATION') }} AS token_migration
-    ON imported.pos_plan_id = token_migration.pos_plan_id
-    AND imported.tenant__r__external_id__c = token_migration.tenant_id
+    LEFT OUTER JOIN {{ source('GENERAL', 'VEHICLE') }} AS vehicle
+        ON source_cte.subscription_id = vehicle.subscription_id
