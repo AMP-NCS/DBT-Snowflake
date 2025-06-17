@@ -81,7 +81,7 @@ sources:
         description: Source table for merchandise items
       - name: PICKLIST_VALUE
         identifier: PICKLIST_VALUE
-        description: Source table for picklist value mappings
+        description: This table stores picklist values, including identifiers, keys, display values, status, ordering, and audit information such as creation and modification metadata.
       - name: WASH_TYPE_ADD_ON_AVAILABLE
         identifier: WASH_TYPE_ADD_ON_AVAILABLE
         description: Source table for wash type add-on availability
@@ -223,8 +223,8 @@ sources:
       - name: LOCATION_PREFERENCES
         identifier: LOCATION_PREFERENCES
         description: Source table for location preference overrides
-      - name: LOCATION_OVERRIDES
-        identifier: LOCATION_OVERRIDES
+      - name: LOCATION_OVERRIDE
+        identifier: LOCATION_OVERRIDE
         description: Source table for subscription location overrides
       - name: TOKEN_MIGRATION_PLAN_LOCATION
         identifier: TOKEN_MIGRATION_PLAN_LOCATION

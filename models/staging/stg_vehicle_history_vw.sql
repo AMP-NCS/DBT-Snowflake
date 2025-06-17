@@ -36,6 +36,7 @@ renamed_cte as (
         VEHICLE_ID as vehicle_id,
         LICENSE_PLATE_NUMBER as license_plate_number,
         LICENSE_PLATE_STATE as license_plate_state,
+        CONCAT(license_plate_number,',',license_plate_state) AS license_plate_id,
         VIF_ID as vif_id,
         COLOR_ID as color_id,
         EVENT_TYPE as event_type,

@@ -53,11 +53,11 @@ renamed_cte as (
         picklist_value_id,
         ROW_NUMBER() OVER (PARTITION BY stripe_subscription_id__c ORDER BY id DESC) AS row_num
     from source_cte
+    -- qualify row_num = 1
 ),
 
 final_cte as (
     select * from renamed_cte
-     WHERE row_num = 1
 )
 
 select * from final_cte
