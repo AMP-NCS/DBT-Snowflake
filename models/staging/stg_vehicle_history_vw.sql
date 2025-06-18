@@ -3,52 +3,53 @@
 
 {{ config(materialized='view') }}
 
-with source_cte as (
-    select
-        ID,
-        TENANT__R__EXTERNAL_ID__C,
-        CREATED,
-        LAST_MODIFIED,
-        VEHICLE_ID,
-        LICENSE_PLATE_NUMBER,
-        LICENSE_PLATE_STATE,
-        VIF_ID,
-        COLOR_ID,
-        EVENT_TYPE,
-        SUBSCRIPTION_ID,
-        PRICE_ID,
-        CREATED_BY_ID,
-        LAST_MODIFIED_BY_ID
-    from {{ source('GENERAL', 'VEHICLE_HISTORY') }}
-),
+WITH
+    source_cte AS (
+        SELECT
+            id,
+            tenant__r__external_id__c,
+            created,
+            last_modified,
+            vehicle_id,
+            license_plate_number,
+            license_plate_state,
+            vif_id,
+            color_id,
+            event_type,
+            subscription_id,
+            price_id,
+            created_by_id,
+            last_modified_by_id
+        FROM {{ source('GENERAL', 'VEHICLE_HISTORY') }}
+    ),
 
-renamed_cte as (
-    select
-        ID as vehicle_history_id,
-        TENANT__R__EXTERNAL_ID__C as tenant_id,
+    renamed_cte AS (
+        SELECT
+            id                                                     AS vehicle_history_id,
+            tenant__r__external_id__c                              AS tenant_id,
 
-        CREATED as created_datetime,
-        cast(CREATED as date) as created_date,
+            created                                                AS created_datetime,
+            cast(created AS date)                                  AS created_date,
 
-        LAST_MODIFIED as last_modified_datetime,
-        cast(LAST_MODIFIED as date) as last_modified_date,
+            last_modified                                          AS last_modified_datetime,
+            cast(last_modified AS date)                            AS last_modified_date,
 
-        VEHICLE_ID as vehicle_id,
-        LICENSE_PLATE_NUMBER as license_plate_number,
-        LICENSE_PLATE_STATE as license_plate_state,
-        CONCAT(license_plate_number,',',license_plate_state) AS license_plate_id,
-        VIF_ID as vif_id,
-        COLOR_ID as color_id,
-        EVENT_TYPE as event_type,
-        SUBSCRIPTION_ID as subscription_id,
-        PRICE_ID as price_id,
-        CREATED_BY_ID as created_by_id,
-        LAST_MODIFIED_BY_ID as last_modified_by_id
-    from source_cte
-),
+            vehicle_id,
+            license_plate_number,
+            license_plate_state,
+            concat(license_plate_number, ',', license_plate_state) AS license_plate_id,
+            vif_id,
+            color_id,
+            event_type,
+            subscription_id,
+            price_id,
+            created_by_id                                           AS created_by_user_id,
+            last_modified_by_id                                     AS last_modified_by_user_id
+        FROM source_cte
+    ),
 
-final_cte as (
-    select * from renamed_cte
-)
+    final_cte AS (
+        SELECT * FROM renamed_cte
+    )
 
-select * from final_cte
+SELECT * FROM final_cte

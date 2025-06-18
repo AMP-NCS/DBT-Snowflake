@@ -1,170 +1,174 @@
-WITH stripe_price as (
-    select
-        PRICE_ID                                      as stripe_price_id,
-        PRODUCT_ID                                    as stripe_product_id,       
-        TENANT__R__EXTERNAL_ID__C                     as tenant_id,
-        DELETED                                        as deleted_flg,
-        ACTIVE                                         as active_flg,
-        TYPE                                           as type,
-        BILLING_SCHEME                                 as billing_scheme,
-        TAX_BEHAVIOR                                   as tax_behavior,
-        NICKNAME                                       as nickname,
-        UNIT_AMOUNT                                    as unit_amount_cents,
-        UNIT_AMOUNT/100                                as unit_amt,
-        RECURRING_AGGREGATE_USAGE                      as recurring_aggregate_usage,
-        RECURRING_INTERVAL                             as recurring_interval,
-        RECURRING_INTERVAL_COUNT                       as recurring_interval_count,
-        RECURRING_USAGE_TYPE                           as recurring_usage_type,
-        TIERS_MODE                                     as tiers_mode,
-        PRICE_CREATED                                  as price_created_datetime,
-        cast(PRICE_CREATED as date)                    as price_created_date,
-        CREATED                                        as created_datetime,
-        cast(CREATED as date)                          as created_date,
-        LAST_MODIFIED                                  as last_modified_datetime,
-        cast(LAST_MODIFIED as date)                    as last_modified_date,
-        PRICE_TYPE                                     as price_type,
-        PRICE_GROUP_ID                                 as price_group_id
-    from {{ source('REPORTING','STRIPE_PRICES') }}
-)
+WITH
+    stripe_price AS (
+        SELECT
+            price_id                    AS stripe_price_id,
+            product_id                  AS stripe_product_id,
+            tenant__r__external_id__c   AS tenant_id,
+            deleted                     AS deleted_flg,
+            active                      AS active_flg,
+            type,
+            billing_scheme,
+            tax_behavior,
+            nickname,
+            unit_amount                 AS unit_amount_cents,
+            recurring_aggregate_usage,
+            recurring_interval,
+            recurring_interval_count,
+            recurring_usage_type,
+            tiers_mode,
+            price_created               AS price_created_datetime,
+            cast(price_created AS date) AS price_created_date,
+            created                     AS created_datetime,
+            cast(created AS date)       AS created_date,
+            last_modified               AS last_modified_datetime,
+            cast(last_modified AS date) AS last_modified_date,
+            price_type,
+            price_group_id,
+            unit_amount / 100           AS unit_amt
+        FROM {{ source('REPORTING','STRIPE_PRICES') }}
+    ),
 
-, stripe_tiers as (
-    select
-        TENANT__R__EXTERNAL_ID__C as tenant_id,
-        PRICE_ID as stripe_price_id,
-        MAX(CASE WHEN TIER_ID = 1 THEN UP_TO END)           AS TIER1_UP_TO,
-        MAX(CASE WHEN TIER_ID = 1 THEN UNIT_AMOUNT/100 END) AS TIER1_AMT,
-        MAX(CASE WHEN TIER_ID = 2 THEN UP_TO END)           AS TIER2_UP_TO,
-        MAX(CASE WHEN TIER_ID = 2 THEN UNIT_AMOUNT/100 END) AS TIER2_AMT,
-        MAX(CASE WHEN TIER_ID = 3 THEN UP_TO END)           AS TIER3_UP_TO,
-        MAX(CASE WHEN TIER_ID = 3 THEN UNIT_AMOUNT/100 END) AS TIER3_AMT,
-        MAX(CASE WHEN TIER_ID = 4 THEN UP_TO END)           AS TIER4_UP_TO,
-        MAX(CASE WHEN TIER_ID = 4 THEN UNIT_AMOUNT/100 END) AS TIER4_AMT
-    from {{ source('REPORTING', 'STRIPE_PRICE_TIERS') }}
-    GROUP BY 1,2
-)
+    stripe_tiers AS (
+        SELECT
+            tenant__r__external_id__c                             AS tenant_id,
+            price_id                                              AS stripe_price_id,
+            max(CASE WHEN tier_id = 1 THEN up_to END)             AS tier1_up_to,
+            max(CASE WHEN tier_id = 1 THEN unit_amount / 100 END) AS tier1_amt,
+            max(CASE WHEN tier_id = 2 THEN up_to END)             AS tier2_up_to,
+            max(CASE WHEN tier_id = 2 THEN unit_amount / 100 END) AS tier2_amt,
+            max(CASE WHEN tier_id = 3 THEN up_to END)             AS tier3_up_to,
+            max(CASE WHEN tier_id = 3 THEN unit_amount / 100 END) AS tier3_amt,
+            max(CASE WHEN tier_id = 4 THEN up_to END)             AS tier4_up_to,
+            max(CASE WHEN tier_id = 4 THEN unit_amount / 100 END) AS tier4_amt
+        FROM {{ source('REPORTING', 'STRIPE_PRICE_TIERS') }}
+        GROUP BY 1, 2
+    ),
 
-, stripe_prod as (
-    select
-        PRODUCT_ID                                     as stripe_product_id,
-        TENANT__R__EXTERNAL_ID__C                      as tenant_id,
-        DELETED                                         as deleted_flg,
-        ACTIVE                                          as active_flg,
-        NAME                                            as name,
-        DESCRIPTION                                     as description,
-        PRODUCT_CREATED                                 as product_created_datetime,
-        cast(PRODUCT_CREATED as date)                   as product_created_date,
-        CREATED                                         as created_datetime,
-        cast(CREATED as date)                           as created_date,
-        LAST_MODIFIED                                   as last_modified_datetime,
-        cast(LAST_MODIFIED as date)                     as last_modified_date,
-        IS_AMP                                          as is_amp_flg
-    from {{ source('REPORTING','STRIPE_PRODUCTS') }}
-)
+    stripe_prod AS (
+        SELECT
+            product_id                    AS stripe_product_id,
+            tenant__r__external_id__c     AS tenant_id,
+            deleted                       AS deleted_flg,
+            active                        AS active_flg,
+            name,
+            description,
+            product_created               AS product_created_datetime,
+            cast(product_created AS date) AS product_created_date,
+            created                       AS created_datetime,
+            cast(created AS date)         AS created_date,
+            last_modified                 AS last_modified_datetime,
+            cast(last_modified AS date)   AS last_modified_date,
+            is_amp                        AS is_amp_flg
+        FROM {{ source('REPORTING','STRIPE_PRODUCTS') }}
+    ),
 
-, amp_price as (
-    select
-        ID                                  as amp_product_price_id,
-        PRODUCT_ID                          as amp_product_id,
-        STRIPE_PRICE_ID                     as stripe_price_id,
-        METADATA                            as metadata,
-        PARSE_JSON(METADATA):PriceGroupId   as price_group_id,
-        ACTIVE                              as active_flg,
-        TENANT__R__EXTERNAL_ID__C           as tenant_id,
-        CREATED_AT                          as created_at_datetime,
-        cast(CREATED_AT as date)            as created_at_date,
-        ORDINAL                             as ordinal,
-        INTERVAL_COUNT                      as interval_count,
-        INTERVAL_TYPE                       as interval_type,
-        PARENT_PRODUCT_PRICE_ID             as parent_product_price_id,
-        LAST_MODIFIED                       as last_modified_datetime,
-        cast(LAST_MODIFIED as date)         as last_modified_date
-    from {{ source('STRIPE','PRODUCT_PRICE') }}
-)
+    amp_price AS (
+        SELECT
+            id                                AS amp_product_price_id,
+            product_id                        AS amp_product_id,
+            stripe_price_id,
+            metadata,
+            active                            AS active_flg,
+            tenant__r__external_id__c         AS tenant_id,
+            created_at                        AS created_at_datetime,
+            cast(created_at AS date)          AS created_at_date,
+            ordinal,
+            interval_count,
+            interval_type,
+            parent_product_price_id,
+            last_modified                     AS last_modified_datetime,
+            cast(last_modified AS date)       AS last_modified_date,
+            parse_json(metadata):PriceGroupId AS price_group_id
+        FROM {{ source('STRIPE','PRODUCT_PRICE') }}
+    ),
 
-, amp_prod as (
-    select
-        stripe_product_id                  as stripe_product_id,
-        description                        as description,
-        monthly_limit                      as monthly_limit,
-        daily_limit                        as daily_limit,
-        active                             as active_flg,
-        metadata                           as metadata,
-        TENANT__R__EXTERNAL_ID__C          as tenant_id,
-        CREATED_AT                         as created_datetime,
-        cast(CREATED_AT as date)           as created_date,
-        ID                                 as record_id,
-        DISPLAY_BANNER                     as display_banner_flg,
-        banner_text                        as banner_text,
-        ordinal                            as ordinal,
-        app_description                    as app_description,
-        name                               as name,
-        LAST_MODIFIED                      as last_modified_datetime,
-        cast(LAST_MODIFIED as date)        as last_modified_date,
-        IS_UPSELL                          as is_upsell_flg,
-        kiosk_image_url                    as kiosk_image_url
-    from {{ source('STRIPE','PRODUCT') }}
-)
+    amp_prod AS (
+        SELECT
+            stripe_product_id,
+            description,
+            monthly_limit,
+            daily_limit,
+            active                      AS active_flg,
+            metadata,
+            tenant__r__external_id__c   AS tenant_id,
+            created_at                  AS created_datetime,
+            cast(created_at AS date)    AS created_date,
+            id                          AS record_id,
+            display_banner              AS display_banner_flg,
+            banner_text,
+            ordinal,
+            app_description,
+            name,
+            last_modified               AS last_modified_datetime,
+            cast(last_modified AS date) AS last_modified_date,
+            is_upsell                   AS is_upsell_flg,
+            kiosk_image_url
+        FROM {{ source('STRIPE','PRODUCT') }}
+    ),
 
-, price_group as (
-    select
-        ID                                         as price_group_id,
-        TENANT__R__EXTERNAL_ID__C                  as tenant_id,
-        CREATED                                    as created_datetime,
-        date(CREATED)                              as created_date,
-        LAST_MODIFIED                              as last_modified_datetime,
-        date(LAST_MODIFIED)                        as last_modified_date,
-        NAME                                       as name,
-        DESCRIPTION                                as description,
-        ACTIVE                                     as active_flg,
-        IS_TAXABLE                                 as is_taxable_flg,
-        CREATED_BY_ID                              as created_by_id,
-        LAST_MODIFIED_BY_ID                        as last_modified_by_id
-    from {{ source('GENERAL','PRICE_GROUP') }}
-)
+    price_group AS (
+        SELECT
+            id                        AS price_group_id,
+            tenant__r__external_id__c AS tenant_id,
+            created                   AS created_datetime,
+            last_modified             AS last_modified_datetime,
+            name,
+            description,
+            active                    AS active_flg,
+            is_taxable                AS is_taxable_flg,
+            created_by_id,
+            last_modified_by_id,
+            date(created)             AS created_date,
+            date(last_modified)       AS last_modified_date
+        FROM {{ source('GENERAL','PRICE_GROUP') }}
+    )
 
 
-SELECT stripe_price.STRIPE_PRICE_ID,
-       stripe_price.TENANT_ID,
-       stripe_prod.STRIPE_PRODUCT_ID,
-       amp_price.AMP_PRODUCT_PRICE_ID,
-       amp_price.AMP_PRODUCT_ID,
-       stripe_prod.NAME AS PRODUCT_NAME,
-       stripe_price.NICKNAME AS PRODUT_DETAIL,
-       price_group.NAME AS PRICE_GROUP_NAME,
-       CONCAT(stripe_price.RECURRING_INTERVAL_COUNT
-                ,' '
-                ,UPPER(stripe_price.RECURRING_INTERVAL)
-                , CASE WHEN stripe_price.RECURRING_INTERVAL_COUNT > 1 THEN 'S' ELSE ''
-                END) AS RECURRING_INVERVAL,
-       
-       TIER1_UP_TO,
-       CAST(TIER1_AMT AS DECIMAL(9,2)) AS TIER1_AMT,
+SELECT
+    stripe_price.stripe_price_id,
+    stripe_price.tenant_id,
+    stripe_prod.stripe_product_id,
+    amp_price.amp_product_price_id,
+    amp_price.amp_product_id,
+    stripe_prod.name                 AS product_name,
+    stripe_price.nickname            AS produt_detail,
+    price_group.name                 AS price_group_name,
+    tier1_up_to,
 
-       TIER2_UP_TO,
-       CAST(TIER2_AMT AS DECIMAL(9,2)) AS TIER2_AMT,
+    cast(tier1_amt AS decimal(9, 2)) AS tier1_amt,
+    tier2_up_to,
 
-       TIER3_UP_TO,
-       CAST(TIER3_AMT AS DECIMAL(9,2)) AS TIER3_AMT,
+    cast(tier2_amt AS decimal(9, 2)) AS tier2_amt,
+    tier3_up_to,
 
-       TIER4_UP_TO,
-       CAST(TIER4_AMT AS DECIMAL(9,2)) AS TIER4_AMT
+    cast(tier3_amt AS decimal(9, 2)) AS tier3_amt,
+    tier4_up_to,
+
+    cast(tier4_amt AS decimal(9, 2)) AS tier4_amt,
+    concat(
+        stripe_price.recurring_interval_count,
+        ' ',
+        upper(stripe_price.recurring_interval),
+        CASE WHEN stripe_price.recurring_interval_count > 1 THEN 'S' ELSE ''
+        END
+    )                                AS recurring_inverval
 
 FROM stripe_price
 
-    LEFT JOIN stripe_tiers  
+    LEFT OUTER JOIN stripe_tiers
         ON stripe_price.stripe_price_id = stripe_tiers.stripe_price_id
-    
-    LEFT JOIN stripe_prod
-        ON stripe_price.STRIPE_PRODUCT_ID = stripe_prod.STRIPE_PRODUCT_ID
 
-    LEFT JOIN amp_price
-        ON stripe_price.STRIPE_PRICE_ID = amp_price.STRIPE_PRICE_ID
-        
-    LEFT JOIN amp_prod
-        ON amp_prod.STRIPE_PRODUCT_ID = stripe_prod.STRIPE_PRODUCT_ID
+    LEFT OUTER JOIN stripe_prod
+        ON stripe_price.stripe_product_id = stripe_prod.stripe_product_id
 
-    LEFT JOIN price_group
-        ON price_group.PRICE_GROUP_ID = amp_price.PRICE_GROUP_ID
+    LEFT OUTER JOIN amp_price
+        ON stripe_price.stripe_price_id = amp_price.stripe_price_id
+
+    LEFT OUTER JOIN amp_prod
+        ON stripe_prod.stripe_product_id = amp_prod.stripe_product_id
+
+    LEFT OUTER JOIN price_group
+        ON amp_price.price_group_id = price_group.price_group_id
 
 
 

@@ -21,19 +21,19 @@ renamed_cte as (
     select
         ID                            as vehicle_rfid_id,
         TENANT__R__EXTERNAL_ID__C     as tenant_id,
+        VEHICLE_ID                    as vehicle_id,
+        RFID                          as rfid,
         
         CREATED                       as created_datetime,
         cast(CREATED as date)         as created_date,
         
-        CREATED_BY_ID                 as created_by_id,
+        CREATED_BY_ID                 as created_by_user_id,
         
         LAST_MODIFIED                 as last_modified_datetime,
         cast(LAST_MODIFIED as date)   as last_modified_date,
         
-        LAST_MODIFIED_BY_ID           as last_modified_by_id,
-        INTEGRATION_ID                as integration_id,
-        VEHICLE_ID                    as vehicle_id,
-        RFID                          as rfid
+        LAST_MODIFIED_BY_ID           as last_modified_by_user_id,
+        INTEGRATION_ID                as integration_id
     from source_cte
 ),
 

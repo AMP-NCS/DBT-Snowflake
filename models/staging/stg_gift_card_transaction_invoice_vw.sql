@@ -22,14 +22,15 @@ renamed_cte as (
         tenant__r__external_id__c          as tenant_id,
         created                            as created_datetime,
         to_date(created)                   as created_date,
-        created_by_id                      as created_by,
-        last_modified                      as updated_datetime,
-        last_modified_by_id                as updated_by,
+        created_by_id                      as created_by_user_id,
+        last_modified                      as last_modified_datetime,
+        to_date(last_modified)             as last_modified_date,
+        last_modified_by_id                as last_modified_user_id,
         gift_card_transaction_id           as gift_card_transaction_id,
         invoice_id                         as invoice_id,
         redeemed_by_user_id                as redeemed_by_user_id,
         invoice_line_item_id               as invoice_line_item_id,
-        refund                             as refund_flg
+        refund                             as refund_flag
     from source_cte
 ),
 

@@ -1,0 +1,161 @@
+{{ config(materialized='view') }}
+
+-- This model replicates the logic of the legacy AMP_DB_DEV.VIEWS.SUBSCRIPTIONS view using dbt models
+-- It leverages staging/intermediate models for each CTE where possible
+
+WITH
+    subs AS (
+        SELECT * FROM {{ ref('stg_stripe_subscriptions_vw') }}
+    ),
+
+    users AS (
+        SELECT * FROM {{ ref('stg_reference_users_vw') }}
+    ),
+
+    invoice_count AS (
+        SELECT * FROM {{ ref('int_subscription_invoice_count_vw') }}
+    ),
+
+    first_invoice AS (
+        SELECT * FROM {{ ref('int_subscription_first_invoice_vw') }}
+    ),
+
+    combined_vehicle_info AS (
+        SELECT * FROM {{ ref('int_subscription_vehicle_tracking_vw') }}
+    ),
+
+    product_details AS (
+        SELECT * FROM {{ ref('stg_reference_product_price_vw') }}
+    ),
+
+    canc AS (
+        SELECT * FROM {{ ref('int_subscription_cancellations_vw') }}
+    ),
+
+    last_charge_failure AS (
+        SELECT * FROM {{ ref('int_subscription_last_charge_failure_vw') }}
+    ),
+
+    wash_locations AS (
+        SELECT
+            subscription_id,
+            first_wash_location_id,
+            last_wash_location_id
+        FROM {{ ref('int_subscription_wash_locations_vw') }}
+    ),
+
+    first_price_id AS (
+        SELECT
+            subscription_id,
+            price_id_current,
+            ROW_NUMBER() OVER (PARTITION BY subscription_id ORDER BY stripe_subscription_item_history_id ASC) AS row_num
+        FROM {{ ref('stg_stripe_subscription_item_history_vw') }}
+        WHERE price_id_current IS NOT NULL
+        QUALIFY row_num = 1
+    )
+
+SELECT
+    subs.tenant_id,
+    subs.stripe_customer_id,
+    subs.subscription_id,
+    users.email
+        AS customer_email,
+    users.name
+        AS customer_name,
+    users.phone_number
+        AS customer_phone_number,
+
+    subs.migrated_unique_tenant_location_code
+        AS legacy_unique_tenant_location_code,
+    subs.migrated_plan_flag,
+    subs.new_status,
+
+    subs.status,
+
+    subs.cancel_at_period_end_flag,
+    subs.coupon_id,
+    subs.subscription_created_date,
+    subs.plan_start_date,
+    subs.current_period_end_date,
+    subs.plan_cancel_request_date,
+    subs.plan_cancel_scheduled_for_date,
+    subs.plan_end_date,
+    canc.created_date                               AS cancellation_created_date,
+    subs.pause_request_date,
+    subs.pause_effective_date,
+    subs.pause_end_date,
+    subs.auto_cancel_date,
+    subs.pending_downgrade_date,
+    product_details.product_name
+        AS pre_downgrade_plan_name,
+    combined_vehicle_info.most_recent_rfid,
+    combined_vehicle_info.license_plate_number,
+
+    combined_vehicle_info.license_plate_state,
+
+    combined_vehicle_info.license_plate_id,
+    canc.cancellation_created_by_user_id                                    AS canceled_by_user_id,
+    canc.picklist_value_id,
+    canc.cancellation_comment,
+
+    invoice_count.number_of_paid_invoices_to_date,
+
+    wash_locations.first_wash_location_id,
+    wash_locations.last_wash_location_id,
+    COALESCE(
+        subs.migrated_unique_tenant_location_code,
+        subs.override_unique_tenant_location_id,
+        subs.subscription_unique_tenant_location_id,
+        subs.signup_unique_tenant_location_id
+    )                                         AS assigned_unique_tenant_location_id,
+
+    -- IFF(CANCELED_BY_USER_ID <> stripe_customer_id, CANCELING_USER.EMAIL__C, NULL) AS CANCELED_BY,
+
+    COALESCE(
+        subs.override_unique_tenant_location_id,
+        subs.subscription_unique_tenant_location_id,
+        subs.signup_unique_tenant_location_id
+    )                                         AS signup_unique_tenant_location_id,
+    IFF(
+        subs.subscription_created_date < '2023-10-04' AND users.stripe_customer_id IS NULL,
+        subs.signup_created_by_user_id,
+        subs.stripe_customer_id
+    )                                         AS attendant_customer_id,
+
+    CASE
+        WHEN subs.status <> 'canceled' THEN NULL
+        WHEN subs.cancellation_details_reason = 'payment_disputed' THEN 'Canceled by Dispute'
+        WHEN canc.canceled_by_user_id = users.external_user_id THEN 'Canceled by Customer'
+        WHEN
+            subs.cancellation_details_reason = 'cancellation_requested'
+            OR (canc.subscription_id IS NOT NULL AND canc.canceled_by_user_id <> users.external_user_id)
+            THEN 'Canceled by Employee'
+        WHEN
+            subs.cancellation_details_reason = 'payment_failed'
+            OR canc.status_pre_cancel IN ('unpaid', 'past_due') THEN 'Failed Payments'
+        ELSE 'Unknown'
+    END
+        AS cancelation_method,
+    IFF(
+        cancelation_method = 'Failed Payments', last_charge_failure.last_charge_failure_message, NULL
+    )                                         AS failed_payment_reason,
+
+    IFF(
+        cancelation_method = 'Failed Payments', INITCAP(last_charge_failure.last_charge_failure_card_funding), NULL
+    )                                         AS failed_payment_card_type,
+    first_invoice.subtotal_amt
+    - first_invoice.discount_amt              AS first_invoice_amt
+
+FROM subs
+    LEFT OUTER JOIN users ON subs.stripe_customer_id = users.stripe_customer_id
+    LEFT OUTER JOIN invoice_count ON subs.subscription_id = invoice_count.subscription_id
+    LEFT OUTER JOIN first_invoice ON subs.subscription_id = first_invoice.subscription_id
+    LEFT OUTER JOIN combined_vehicle_info
+        ON
+            subs.subscription_id = combined_vehicle_info.first_subscription_id_for_plate
+            AND subs.license_plate_id = combined_vehicle_info.license_plate_id
+    LEFT OUTER JOIN canc ON subs.subscription_id = canc.subscription_id
+    LEFT OUTER JOIN product_details ON subs.downgrade_price_id = product_details.stripe_price_id
+    -- LEFT JOIN status_pre_canc ON subs.subscription_id = status_pre_canc.subscription_id
+    LEFT OUTER JOIN last_charge_failure ON subs.subscription_id = last_charge_failure.subscription_id
+    LEFT OUTER JOIN wash_locations ON subs.subscription_id = wash_locations.subscription_id

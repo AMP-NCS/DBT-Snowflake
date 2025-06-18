@@ -3,22 +3,23 @@
 
 {{ config(materialized='view') }}
 
-with source_cte as (
-    select
-        TENANT_ID,
-        LICENSE_PLATE_NUMBER
-    from {{ source('INTERNAL', 'LEGACY_REACTIVATION_CHECK') }}
-),
+WITH
+    source_cte AS (
+        SELECT
+            tenant_id,
+            license_plate_number
+        FROM {{ source('INTERNAL', 'LEGACY_REACTIVATION_CHECK') }}
+    ),
 
-renamed_cte as (
-    select
-        TENANT_ID as tenant_id,
-        LICENSE_PLATE_NUMBER as license_plate_number
-    from source_cte
-),
+    renamed_cte AS (
+        SELECT
+            tenant_id,
+            license_plate_number
+        FROM source_cte
+    ),
 
-final_cte as (
-    select * from renamed_cte
-)
+    final_cte AS (
+        SELECT * FROM renamed_cte
+    )
 
-select * from final_cte
+SELECT * FROM final_cte
