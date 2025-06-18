@@ -46,13 +46,14 @@ SELECT
     v.license_plate_number,
     v.license_plate_state,
     v.tenant_id,
+    v.license_plate_id,
     lfs.subscription_id      AS first_subscription_id_for_plate,
     lls.license_plate_number AS is_legacy_reactivation,
     mrf.rfid                 AS most_recent_rfid
 FROM vehicle AS v
     LEFT OUTER JOIN lp_first_sub AS lfs
         ON
-            license_plate_id = lfs.license_plate_id
+            v.license_plate_id = lfs.license_plate_id
             AND v.tenant_id = lfs.tenant_id
     LEFT OUTER JOIN lp_legacy_subs AS lls
         ON

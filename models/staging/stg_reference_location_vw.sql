@@ -4,27 +4,28 @@
 
 {{ config(materialized='view') }}
 
-WITH base_locations AS (
-    SELECT
-        loc.EXTERNAL_ID__C AS location_external_id,
-        loc.INTERNAL_NAME__C AS location_internal_name,
-        loc.ZIP_CODE__C AS zip_code,
-        loc.CITY__C AS city,
-        loc.STATE__C AS state,
-        loc.STREET1__C AS street1,
-        loc.STREET2__C AS street2,
-        loc.LOCATION_CODE AS location_code,
-        loc.TENANT__R__EXTERNAL_ID__C AS tenant_id
-    FROM {{ source('GENERAL','AUTOWASHLOCATION__C') }} loc
-),
+WITH
+    base_locations AS (
+        SELECT
+            loc.external_id__c            AS location_external_id,
+            loc.internal_name__c          AS location_internal_name,
+            loc.zip_code__c               AS zip_code,
+            loc.city__c                   AS city,
+            loc.state__c                  AS state,
+            loc.street1__c                AS street1,
+            loc.street2__c                AS street2,
+            loc.location_code,
+            loc.tenant__r__external_id__c AS tenant_id
+        FROM {{ source('GENERAL','AUTOWASHLOCATION__C') }} AS loc
+    ),
 
-rls_enrichment AS (
-    SELECT
-        hier.LOCATION_ID AS location_external_id,
-        hier.ROW_LEVEL_SECURITY_ID,
-        hier.IS_FRANCHISE
-    FROM {{ source('INTERNAL','LOCATION_HIERARCHY') }} hier
-)
+    rls_enrichment AS (
+        SELECT
+            hier.location_id AS location_external_id,
+            hier.row_level_security_id,
+            hier.is_franchise
+        FROM {{ source('INTERNAL','LOCATION_HIERARCHY') }} AS hier
+    )
 
 SELECT
     base.location_external_id,
@@ -36,22 +37,22 @@ SELECT
     base.street2,
     base.location_code,
     base.tenant_id,
-    CONCAT(base.tenant_id,'-',base.location_external_id) AS unique_tenant_location_id,
-    CONCAT(base.tenant_id,'-',base.location_code) AS unique_tenant_location_code,
+    CONCAT(base.tenant_id, '-', base.location_external_id) AS unique_tenant_location_id,
+    CONCAT(base.tenant_id, '-', base.location_code)        AS unique_tenant_location_code,
 
     -- Add franchise flag and row-level security ID
-    COALESCE(rls.ROW_LEVEL_SECURITY_ID, base.tenant_id) AS row_level_security_id,
-    COALESCE(rls.IS_FRANCHISE, FALSE) AS is_franchise,
+    COALESCE(rls.row_level_security_id, base.tenant_id)    AS row_level_security_id,
+    COALESCE(rls.is_franchise, FALSE)                      AS is_franchise_flag,
 
     -- Categorized RLS ID (used often in TRANSACTIONS_ALL)
     CASE
-        WHEN base.tenant_id = '2kds72w63tiujwdmqox8g2q0syvrdqz4' AND COALESCE(rls.IS_FRANCHISE, FALSE) = TRUE
+        WHEN base.tenant_id = '2kds72w63tiujwdmqox8g2q0syvrdqz4' AND COALESCE(rls.is_franchise, FALSE) = TRUE
             THEN '2kds72w63tiujwdmqox8g2q0syvrdqz4_franchise'
         WHEN base.tenant_id = '2kds72w63tiujwdmqox8g2q0syvrdqz4'
             THEN '2kds72w63tiujwdmqox8g2q0syvrdqz4_corporate'
-        ELSE COALESCE(rls.ROW_LEVEL_SECURITY_ID, base.tenant_id)
-    END AS categorized_rls_id
+        ELSE COALESCE(rls.row_level_security_id, base.tenant_id)
+    END                                                    AS categorized_rls_id
 
-FROM base_locations base
-LEFT JOIN rls_enrichment rls
-    ON base.location_external_id = rls.location_external_id
+FROM base_locations AS base
+    LEFT OUTER JOIN rls_enrichment AS rls
+        ON base.location_external_id = rls.location_external_id

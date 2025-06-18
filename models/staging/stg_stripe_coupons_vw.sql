@@ -3,73 +3,75 @@
 
 {{ config(materialized='view') }}
 
-with source_cte as (
-    select
-        TENANT__R__EXTERNAL_ID__C,
-        COUPON_ID,
-        NAME,
-        AMOUNT_OFF,
-        PERCENT_OFF,
-        DURATION,
-        DURATION_IN_MONTHS,
-        MAX_REDEMPTIONS,
-        REDEEM_BY,
-        DEVICE_LIMIT,
-        MAX_USER_REDEMPTIONS,
-        DELETED,
-        COUPON_CREATED,
-        CREATED,
-        LAST_MODIFIED,
-        CONTEXT,
-        IS_ADMIN,
-        IS_FIXED_DISCOUNT,
-        TYPE,
-        LABEL_OVERRIDE,
-        AUTO_CANCEL
-    from {{ source('REPORTING', 'STRIPE_COUPONS') }}
-),
+WITH
+    source_cte AS (
+        SELECT
+            tenant__r__external_id__c,
+            coupon_id,
+            name,
+            amount_off,
+            percent_off,
+            duration,
+            duration_in_months,
+            max_redemptions,
+            redeem_by,
+            device_limit,
+            max_user_redemptions,
+            deleted,
+            coupon_created,
+            created,
+            last_modified,
+            context,
+            is_admin,
+            is_fixed_discount,
+            type,
+            label_override,
+            auto_cancel
+        FROM {{ source('REPORTING', 'STRIPE_COUPONS') }}
+    ),
 
-renamed_cte as (
-    select
-        TENANT__R__EXTERNAL_ID__C as tenant_id,
-        COUPON_ID as coupon_id,
-        NAME as name,
+    renamed_cte AS (
+        SELECT
+            tenant__r__external_id__c    AS tenant_id,
+            coupon_id,
+            name                         AS coupon_name,
 
-        AMOUNT_OFF as amount_off_cents,
-        AMOUNT_OFF/100.0 as amount_off_amt,
+            -- AMOUNT_OFF as amount_off_cents,
+            amount_off / 100.0           AS amount_off_amt,
+            percent_off,
 
-        PERCENT_OFF as percent_off,
-        DURATION as duration,
-        DURATION_IN_MONTHS as duration_in_months,
-        MAX_REDEMPTIONS as max_redemptions,
+            duration,
+            duration_in_months,
+            max_redemptions,
+            redeem_by                    AS redeem_by_datetime,
 
-        REDEEM_BY as redeem_by_datetime,
-        cast(REDEEM_BY as date) as redeem_by_date,
+            cast(redeem_by AS date)      AS redeem_by_date,
+            device_limit,
 
-        DEVICE_LIMIT as device_limit,
-        MAX_USER_REDEMPTIONS as max_user_redemptions,
-        DELETED as deleted_flg,
+            max_user_redemptions,
+            deleted                      AS deleted_flag,
+            coupon_created               AS coupon_created_datetime,
 
-        COUPON_CREATED as coupon_created_datetime,
-        cast(COUPON_CREATED as date) as coupon_created_date,
+            cast(coupon_created AS date) AS coupon_created_date,
+            created                      AS created_datetime,
 
-        CREATED as created_datetime,
-        cast(CREATED as date) as created_date,
+            cast(created AS date)        AS created_date,
+            last_modified                AS last_modified_datetime,
 
-        LAST_MODIFIED as last_modified_datetime,
-        cast(LAST_MODIFIED as date) as last_modified_date,
+            cast(last_modified AS date)  AS last_modified_date,
+            context,
 
-        CONTEXT as context,
-        IS_ADMIN as is_admin_flg,
-        IS_FIXED_DISCOUNT as is_fixed_discount_flg,
-        TYPE as type,
-        LABEL_OVERRIDE as label_override,
-        AUTO_CANCEL as auto_cancel_flg
-    from source_cte
-),
+            is_admin                     AS is_admin_flag,
+            is_fixed_discount            AS is_fixed_discount_flag,
+            type                         AS coupon_type,
+            label_override,
+            auto_cancel                  AS auto_cancel_flg,
 
-final_cte as (
-    select * from renamed_cte
-)
+        FROM source_cte
+    ),
 
-select * from final_cte
+    final_cte AS (
+        SELECT * FROM renamed_cte
+    )
+
+SELECT * FROM final_cte

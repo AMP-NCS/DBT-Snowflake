@@ -43,9 +43,10 @@ renamed_cte as (
         to_date(LAST_MODIFIED)         as last_modified_date,
 
         ACCOUNT_ID                     as account_id,
-        IS_ACTIVE                      as is_active_flg,
+        IS_ACTIVE                      as is_active_flag,
         LICENSE_PLATE_NUMBER           as license_plate_number,
         LICENSE_PLATE_STATE            as license_plate_state,
+        CONCAT(license_plate_number,',',license_plate_state) AS license_plate_id,
 
         TRANSFER_DATE                  as transfer_datetime,
         to_date(TRANSFER_DATE)         as transfer_date,
@@ -57,13 +58,13 @@ renamed_cte as (
         VIF_ID                         as vif_id,
         COLOR_ID                       as color_id,
         MIGRATION_ID                   as migration_id,
-        IS_TEMP_TAG                    as is_temp_tag_flg,
+        IS_TEMP_TAG                    as is_temp_tag_flag,
         SUBSCRIPTION_ID                as subscription_id,
         ACTIVE_SUBSCRIPTION_ID         as active_subscription_id,
         SUBSCRIPTION_STATUS            as subscription_status,
         INTEGRATION_METADATA           as integration_metadata,
-        CREATED_BY_ID                  as created_by_id,
-        LAST_MODIFIED_BY_ID            as last_modified_by_id,
+        CREATED_BY_ID                  as created_by_user_id,
+        LAST_MODIFIED_BY_ID            as last_modified_by_user_id,
         VIN                            as vin,
         MODEL_LABEL_OVERRIDE           as model_label_override
     from source_cte

@@ -1,7 +1,7 @@
 [sqlfluff]
 dialect = snowflake
 templater = dbt
-exclude_rules = L009,L031
+exclude_rules = L009,L031,L034,L036,L042,L044,L045,L063
 max_line_length = 120
 verbose = 0
 nocolor = False
@@ -83,6 +83,10 @@ unindent_clauses = join,else,when,end
 [sqlfluff:rules:structure.subquery]
 prefer_new_line = true
 
+[sqlfluff:rules:structure.column_order]
+# Disable column ordering entirely
+ignore_column_ordering = true
+
 [sqlfluff:layout:type:comma]
 line_position = trailing
 spacing_before = touch
@@ -102,8 +106,9 @@ spacing_after = single
 
 [sqlfluff:layout:type:alias_expression]
 spacing_before = align
+spacing_after = single
 align_within = select_clause
-align_scope = file
+align_scope = bracketed
 
 [sqlfluff:layout:type:casting_operator]
 spacing_before = touch

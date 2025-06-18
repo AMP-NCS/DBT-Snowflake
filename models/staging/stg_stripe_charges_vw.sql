@@ -36,13 +36,15 @@ renamed_cte AS (
         tenant__r__external_id__c    AS tenant_id,
         charge_id,
 
-        amount                       AS amount_cents,
-        amount_refunded              AS amount_refunded_cents,
+        -- amount                       AS amount_cents,
+        amount / 100.0               AS charge_amt,
+        -- amount_refunded              AS amount_refunded_cents,
+        amount_refunded / 100.0      AS refunded_amt,
 
         status,
         failure_code,
 
-        disputed                     AS disputed_flg,
+        disputed                     AS disputed_flag,
         charge_created               AS charge_created_datetime,
 
         cast(charge_created AS date) AS charge_created_date,
@@ -57,7 +59,7 @@ renamed_cte AS (
         payment_id,
 
         invoice_id,
-        refunded                     AS refunded_flg,
+        refunded                     AS refunded_flag,
         credit_card_brand,
 
         credit_card_country,
@@ -69,9 +71,7 @@ renamed_cte AS (
         payment_method_details_card_funding,
 
         payment_method_details_card_wallet_type,
-        payment_method_id,
-        amount / 100.0               AS amount_amt,
-        amount_refunded / 100.0      AS amount_refunded_amt
+        payment_method_id
     FROM source_cte
 ),
 
