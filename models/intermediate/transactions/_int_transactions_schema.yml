@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: int_gift_card_redemption_total_vw
+    description: >
+      Intermediate model that calculates the total redemption amount for gift cards per invoice.
+      This view aggregates all gift card transactions associated with an invoice and converts
+      the amount from cents to dollars (dividing by -100 to show positive redemption amounts).
+    columns:
+      - name: invoice_id
+        description: Unique identifier for the invoice where the gift card was redeemed.
+        tests:
+          - not_null
+      - name: total_redemption_amount
+        description: >
+          Total amount redeemed from gift cards for this invoice, in dollars.
+          Converted from cents and made positive for easier reporting. 
