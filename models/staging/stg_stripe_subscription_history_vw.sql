@@ -43,6 +43,7 @@ WITH source_cte AS (
         aaa_membership_number_current,
         aaa_membership_number_previous
     FROM {{ source('REPORTING', 'STRIPE_SUBSCRIPTION_HISTORIES') }}
+    WHERE ID IS NOT NULL
 ),
 
 renamed_cte AS (

@@ -18,6 +18,7 @@ WITH source_cte AS (
         created,
         last_modified
     FROM {{ source('REPORTING', 'STRIPE_SUBSCRIPTION_ITEM_HISTORIES') }}
+    WHERE ID IS NOT NULL
 ),
 
 renamed_cte AS (
