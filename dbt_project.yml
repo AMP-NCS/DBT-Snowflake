@@ -1,4 +1,3 @@
-
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
@@ -26,6 +25,12 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+node_colors:
+  staging: '#1f77b4'      # blue
+  intermediate: '#ff7f0e' # orange
+  fact: '#2ca02c'         # green
+  reporting: '#d62728'    # red
+  dimension: '#9467bd'    # purple
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
