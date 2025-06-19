@@ -8,13 +8,15 @@ models:
         description: "Unique identifier for the Autowash Account."
         tests:
           - not_null
-          - unique
       - name: tenant_id
         description: "External identifier for the tenant."
         tests:
           - not_null
       - name: account_external_id
         description: "External ID for the account."
+        tests:
+          - not_null
+          - unique
       - name: name
         description: "Name of the account."
       - name: stripe_subscription_id
@@ -427,7 +429,6 @@ models:
         description: "Unique identifier for the discount."
         tests:
           - not_null
-          - unique
       - name: coupon_id
         description: "ID of the related coupon."
       - name: promotion_code_id
@@ -448,6 +449,9 @@ models:
         description: "Flag indicating if the discount is deleted."
       - name: stripe_discount_id
         description: "Unique identifier for the Stripe discount."
+        tests:
+          - not_null
+          - unique
       - name: start_datetime
         description: "Start datetime of the discount."
       - name: end_datetime

@@ -23,6 +23,8 @@ with source_cte as (
         IS_DELETED,
         PRORATE_SUBSCRIPTION_CHANGES
     from {{ source('GENERAL', 'AUTOWASH_ACCOUNT__C') }}
+    WHERE TENANT__R__EXTERNAL_ID__C IS NOT NULL
+    AND EXTERNAL_ID__C IS NOT NULL
 ),
 
 renamed_cte as (
