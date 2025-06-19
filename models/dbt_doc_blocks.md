@@ -922,22 +922,6 @@ Maximum number of times the coupon can be redeemed.
 Flag indicating if the transaction was refunded.
 {% enddocs %}
 
-{% docs LOCATION_ID %}
-Unique identifier for each location.
-{% enddocs %}
-
-{% docs TENANT_ID %}
-External identifier for the tenant to which the location belongs.
-{% enddocs %}
-
-{% docs LOCATION_NAME %}
-Human-readable name of the location.
-{% enddocs %}
-
-{% docs LOCATION_INTERNAL_NAME %}
-Internal system name used for identifying the location.
-{% enddocs %}
-
 {% docs LOCATION_IS_FRANCHISE %}
 Boolean flag indicating if the location is a franchise.
 {% enddocs %}
@@ -950,36 +934,8 @@ Boolean flag indicating if the location is a test/demo location.
 Short internal code used for location identification.
 {% enddocs %}
 
-{% docs LOCATION_STREET1 %}
-Primary street address of the location.
-{% enddocs %}
-
-{% docs LOCATION_STREET2 %}
-Secondary address line, if available.
-{% enddocs %}
-
-{% docs LOCATION_CITY %}
-City where the location is situated.
-{% enddocs %}
-
-{% docs LOCATION_STATE %}
-State or region of the location.
-{% enddocs %}
-
-{% docs LOCATION_ZIP_CODE %}
-Postal ZIP code of the location.
-{% enddocs %}
-
-{% docs LOCATION_IMAGE_URL %}
-Image URL or visual representation of the location.
-{% enddocs %}
-
 {% docs LOCATION_CREATED_DATETIME %}
 Timestamp when the location record was first created.
-{% enddocs %}
-
-{% docs ROW_LEVEL_SECURITY_ID %}
-Identifier used for enforcing row-level security by tenant or hierarchy.
 {% enddocs %}
 
 {% docs pause_request_date %}
@@ -1236,34 +1192,6 @@ Previous vehicle color.
 
 {% docs vehicle_color_current %}
 Current vehicle color.
-{% enddocs %}
-
----
-
-## Intermediate Models
-
-{% docs int_subscription_cancellations_vw %}
-Intermediate model that provides the latest cancellation details for each subscription, including reason codes, user information, and pre-cancellation status.
-{% enddocs %}
-
-{% docs int_subscription_first_invoice_vw %}
-Intermediate model that captures the first paid invoice for each subscription, including amounts and creation dates.
-{% enddocs %}
-
-{% docs int_subscription_invoice_count_vw %}
-Intermediate model that counts the total number of paid invoices for each subscription.
-{% enddocs %}
-
-{% docs int_subscription_last_charge_failure_vw %}
-Intermediate model that provides details about the most recent failed charge attempt for each subscription.
-{% enddocs %}
-
-{% docs int_subscription_vehicle_tracking_vw %}
-Intermediate model that tracks vehicle information for subscriptions, including license plate history, RFID tags, and legacy reactivation status.
-{% enddocs %}
-
-{% docs int_subscription_wash_locations_vw %}
-Intermediate model that tracks the first and last wash locations for each subscription based on mobile user activity.
 {% enddocs %}
 
 ---
