@@ -26,8 +26,8 @@ SELECT
     sh.status_previous   AS status_pre_cancel,
     sc.last_modified_datetime,
     sc.last_modified_date,
-    ROW_NUMBER() OVER (PARTITION BY sc.subscription_id ORDER BY sc.created_datetime DESC) AS row_num,
-    CURRENT_TIMESTAMP()  AS table_updated_at
+    ROW_NUMBER() OVER (PARTITION BY sc.subscription_id ORDER BY sc.created_datetime DESC) AS row_num
+    -- CURRENT_TIMESTAMP()  AS table_updated_at
 FROM {{ ref('stg_subscription_cancellations_vw') }} AS sc
 
     -- grab “pre‐cancel” status if they just flipped to canceled

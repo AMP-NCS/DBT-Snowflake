@@ -16,9 +16,9 @@ SELECT
         AS is_legacy_reactivation,
 
     -- most recent RFID
-    mrf.rfid                                               AS most_recent_rfid,
+    mrf.rfid                                               AS most_recent_rfid
 
-    current_timestamp()                                    AS table_updated_at
+    -- current_timestamp()                                    AS table_updated_at
 
 FROM {{ ref('stg_vehicle_vw') }} AS v
 

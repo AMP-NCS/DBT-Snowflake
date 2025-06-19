@@ -11,8 +11,8 @@ SELECT
   subtotal_amt - discount_amt     AS first_invoice_amt,
   invoice_created_datetime,
   CAST(invoice_created_datetime AS DATE) AS first_invoice_created_date,
-  ROW_NUMBER() OVER (PARTITION BY subscription_id ORDER BY invoice_created_datetime ASC) AS row_num,
-  CURRENT_TIMESTAMP()             AS table_updated_at
+  ROW_NUMBER() OVER (PARTITION BY subscription_id ORDER BY invoice_created_datetime ASC) AS row_num
+--   CURRENT_TIMESTAMP()             AS table_updated_at
 FROM {{ ref('stg_stripe_invoices_vw') }}
 WHERE
   status = 'paid'
