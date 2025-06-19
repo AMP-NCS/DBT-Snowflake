@@ -1,0 +1,938 @@
+version: 2
+
+models:
+  - name: stg_autowash_account_vw
+    description: "{{ doc('stg_autowash_account_vw') }}"
+    columns:
+      - name: autowash_account_id
+        description: "{{ doc('autowash_account_id') }}"
+        tests:
+          - not_null
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: account_external_id
+        description: "{{ doc('account_external_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "{{ doc('name') }}"
+      - name: stripe_subscription_id
+        description: "{{ doc('stripe_subscription_id') }}"
+      - name: primary_account_holder_user_id
+        description: "{{ doc('primary_account_holder_user_id') }}"
+      - name: allow_pay_per_wash_flg
+        description: "{{ doc('allow_pay_per_wash_flg') }}"
+      - name: account_type
+        description: "Type of the account."
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: lastmodified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_gift_card_promotion_vw
+    description: "{{ doc('stg_gift_card_promotion_vw') }}"
+    columns:
+      - name: promotion_id
+        description: "{{ doc('promotion_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: purchase_price_amt
+        description: "{{ doc('purchase_price_amt') }}"
+      - name: value_amt
+        description: "{{ doc('value_amt') }}"
+      - name: active_flag
+        description: "{{ doc('active_flag') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_gift_card_transaction_invoice_vw
+    description: "{{ doc('stg_gift_card_transaction_invoice_vw') }}"
+    columns:
+      - name: gift_card_transaction_invoice_id
+        description: "{{ doc('gift_card_transaction_invoice_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: gift_card_transaction_id
+        description: "{{ doc('gift_card_transaction_id') }}"
+      - name: invoice_id
+        description: "{{ doc('invoice_id') }}"
+      - name: redeemed_by_user_id
+        description: "{{ doc('redeemed_by_user_id') }}"
+      - name: refund_flag
+        description: "{{ doc('refund_flag') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_gift_card_transaction_purchase_vw
+    description: "{{ doc('stg_gift_card_transaction_purchase_vw') }}"
+    columns:
+      - name: gift_card_transaction_purchase_id
+        description: "{{ doc('gift_card_transaction_purchase_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: gift_card_transaction_id
+        description: "{{ doc('gift_card_transaction_id') }}"
+      - name: invoice_id
+        description: "{{ doc('invoice_id') }}"
+      - name: is_guest_purchase_flag
+        description: "{{ doc('is_guest_purchase_flag') }}"
+      - name: purchased_by_user_id
+        description: "{{ doc('purchased_by_user_id') }}"
+      - name: purchased_by_guest_name
+        description: "{{ doc('purchased_by_guest_name') }}"
+      - name: purchased_by_guest_email
+        description: "{{ doc('purchased_by_guest_email') }}"
+      - name: gift_card_promotion_id
+        description: "{{ doc('gift_card_promotion_id') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_gift_card_transaction_vw
+    description: "{{ doc('stg_gift_card_transaction_vw') }}"
+    columns:
+      - name: gift_card_transaction_id
+        description: "{{ doc('gift_card_transaction_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: gift_card_id
+        description: "{{ doc('gift_card_id') }}"
+      - name: transaction_type_id
+        description: "Type of the transaction."
+      - name: gift_card_transaction_amt
+        description: "{{ doc('gift_card_transaction_amt') }}"
+      - name: user_id
+        description: "{{ doc('user_id') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_internal_legacy_reactivation_vw
+    description: "{{ doc('stg_internal_legacy_reactivation_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: license_plate_number
+        description: "{{ doc('license_plate_number') }}"
+        tests:
+          - not_null
+
+  - name: stg_mobile_user_activity_vw
+    description: "{{ doc('stg_mobile_user_activity_vw') }}"
+    columns:
+      - name: mobile_user_activity_id
+        description: "{{ doc('mobile_user_activity_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: user_id
+        description: "{{ doc('user_id') }}"
+      - name: autowash_location_id
+        description: "ID of the location where the activity occurred."
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_reference_location_vw
+    description: "{{ doc('stg_reference_location_vw') }}"
+    columns:
+      - name: location_external_id
+        description: "{{ doc('location_external_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: location_internal_name
+        description: "{{ doc('location_internal_name') }}"
+      - name: zip_code
+        description: "{{ doc('zip_code') }}"
+      - name: city
+        description: "{{ doc('city') }}"
+      - name: state
+        description: "{{ doc('state') }}"
+      - name: street1
+        description: "{{ doc('street1') }}"
+      - name: street2
+        description: "{{ doc('street2') }}"
+      - name: location_code
+        description: "{{ doc('location_code') }}"
+      - name: row_level_security_id
+        description: "{{ doc('row_level_security_id') }}"
+      - name: is_franchise_flag
+        description: "{{ doc('is_franchise_flag') }}"
+      - name: categorized_rls_id
+        description: "{{ doc('categorized_rls_id') }}"
+
+  - name: stg_reference_picklist_vw
+    description: "{{ doc('stg_reference_picklist_vw') }}"
+    columns:
+      - name: picklist_value_id
+        description: "{{ doc('picklist_value_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: picklist_id
+        description: "{{ doc('picklist_id') }}"
+      - name: picklist_key
+        description: "{{ doc('picklist_key') }}"
+      - name: picklist_value
+        description: "{{ doc('picklist_value') }}"
+      - name: active_flag
+        description: "{{ doc('active_flag') }}"
+      - name: ordinal
+        description: "{{ doc('ordinal') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_reference_product_price_vw
+    description: "{{ doc('stg_reference_product_price_vw') }}"
+    columns:
+      - name: stripe_price_id
+        description: "{{ doc('stripe_price_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: stripe_product_id
+        description: "{{ doc('stripe_product_id') }}"
+      - name: amp_product_price_id
+        description: "{{ doc('amp_product_price_id') }}"
+      - name: amp_product_id
+        description: "{{ doc('amp_product_id') }}"
+      - name: product_name
+        description: "{{ doc('product_name') }}"
+      - name: price_group_name
+        description: "{{ doc('price_group_name') }}"
+      - name: tier1_amt
+        description: "{{ doc('tier1_amt') }}"
+      - name: tier2_amt
+        description: "{{ doc('tier2_amt') }}"
+      - name: tier3_amt
+        description: "{{ doc('tier3_amt') }}"
+      - name: tier4_amt
+        description: "{{ doc('tier4_amt') }}"
+      - name: recurring_inverval
+        description: "{{ doc('recurring_inverval') }}"
+
+  - name: stg_reference_users_vw
+    description: "{{ doc('stg_reference_users_vw') }}"
+    columns:
+      - name: user_id
+        description: "{{ doc('user_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: stripe_customer_id
+        description: "{{ doc('stripe_customer_id') }}"
+        tests:
+          - unique
+      - name: email
+        description: "{{ doc('email') }}"
+      - name: name
+        description: "{{ doc('name') }}"
+      - name: phone_number
+        description: "{{ doc('phone_number') }}"
+      - name: employee_id
+        description: "{{ doc('employee_id') }}"
+      - name: zip_code
+        description: "{{ doc('zip_code') }}"
+
+  - name: STG_REF_LOCATIONS_TBL
+    description: "{{ doc('STG_REF_LOCATIONS_TBL') }}"
+    columns:
+      - name: LOCATION_ID
+        description: "{{ doc('LOCATION_ID') }}"
+        tests:
+          - not_null
+          - unique
+      - name: TENANT_ID
+        description: "{{ doc('TENANT_ID') }}"
+        tests:
+          - not_null
+      - name: LOCATION_NAME
+        description: "{{ doc('LOCATION_NAME') }}"
+      - name: LOCATION_INTERNAL_NAME
+        description: "{{ doc('LOCATION_INTERNAL_NAME') }}"
+      - name: LOCATION_IS_FRANCHISE
+        description: "{{ doc('LOCATION_IS_FRANCHISE') }}"
+      - name: TEST_LOCATION
+        description: "{{ doc('TEST_LOCATION') }}"
+      - name: LOCATION_CODE
+        description: "{{ doc('LOCATION_CODE') }}"
+      - name: LOCATION_STREET1
+        description: "{{ doc('LOCATION_STREET1') }}"
+      - name: LOCATION_STREET2
+        description: "{{ doc('LOCATION_STREET2') }}"
+      - name: LOCATION_CITY
+        description: "{{ doc('LOCATION_CITY') }}"
+      - name: LOCATION_STATE
+        description: "{{ doc('LOCATION_STATE') }}"
+      - name: LOCATION_ZIP_CODE
+        description: "{{ doc('LOCATION_ZIP_CODE') }}"
+      - name: LOCATION_IMAGE_URL
+        description: "{{ doc('LOCATION_IMAGE_URL') }}"
+      - name: LOCATION_CREATED_DATETIME
+        description: "{{ doc('LOCATION_CREATED_DATETIME') }}"
+      - name: LAST_MODIFIED_DATETIME
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: ROW_LEVEL_SECURITY_ID
+        description: "{{ doc('ROW_LEVEL_SECURITY_ID') }}"
+
+  - name: stg_stripe_charges_vw
+    description: "{{ doc('stg_stripe_charges_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: charge_id
+        description: "{{ doc('charge_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: charge_amt
+        description: "{{ doc('charge_amt') }}"
+      - name: refunded_amt
+        description: "{{ doc('refunded_amt') }}"
+      - name: status
+        description: "{{ doc('status') }}"
+      - name: disputed_flag
+        description: "{{ doc('disputed_flag') }}"
+      - name: charge_created_datetime
+        description: "{{ doc('charge_created_datetime') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: invoice_id
+        description: "{{ doc('invoice_id') }}"
+      - name: refunded_flag
+        description: "{{ doc('refunded_flag') }}"
+      - name: credit_card_brand
+        description: "{{ doc('credit_card_brand') }}"
+      - name: credit_card_country
+        description: "{{ doc('credit_card_country') }}"
+      - name: credit_card_expiration_month
+        description: "{{ doc('credit_card_expiration_month') }}"
+      - name: credit_card_expiration_year
+        description: "{{ doc('credit_card_expiration_year') }}"
+      - name: credit_card_last_four
+        description: "{{ doc('credit_card_last_four') }}"
+      - name: failure_message
+        description: "{{ doc('failure_message') }}"
+      - name: payment_method_id
+        description: "{{ doc('payment_method_id') }}"
+
+  - name: stg_stripe_coupons_vw
+    description: "{{ doc('stg_stripe_coupons_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: coupon_id
+        description: "{{ doc('coupon_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: coupon_name
+        description: "{{ doc('coupon_name') }}"
+      - name: amount_off_amt
+        description: "{{ doc('amount_off_amt') }}"
+      - name: percent_off
+        description: "{{ doc('percent_off') }}"
+      - name: duration
+        description: "{{ doc('duration') }}"
+      - name: duration_in_months
+        description: "{{ doc('duration_in_months') }}"
+      - name: max_redemptions
+        description: "{{ doc('max_redemptions') }}"
+      - name: redeem_by_datetime
+        description: "{{ doc('redeem_by_datetime') }}"
+      - name: is_admin_flag
+        description: "{{ doc('is_admin_flag') }}"
+      - name: is_fixed_discount_flag
+        description: "{{ doc('is_fixed_discount_flag') }}"
+      - name: deleted_flag
+        description: "{{ doc('deleted_flag') }}"
+      - name: auto_cancel_flg
+        description: "{{ doc('auto_cancel_flg') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_stripe_discounts_vw
+    description: "{{ doc('stg_stripe_discounts_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: stripe_discount_id
+        description: "{{ doc('stripe_discount_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: coupon_id
+        description: "{{ doc('coupon_id') }}"
+      - name: promo_code_id
+        description: "{{ doc('promo_code_id') }}"
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_stripe_invoice_line_items_vw
+    description: "{{ doc('stg_stripe_invoice_line_items_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: invoice_line_item_id
+        description: "{{ doc('invoice_line_item_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: invoice_id
+        description: "{{ doc('invoice_id') }}"
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: type
+        description: "{{ doc('type') }}"
+      - name: description
+        description: "{{ doc('description') }}"
+      - name: invoice_line_item_amt
+        description: "{{ doc('invoice_line_item_amt') }}"
+      - name: invoice_line_item_discount_amt
+        description: "{{ doc('invoice_line_item_discount_amt') }}"
+      - name: invoice_line_item_tax_amt
+        description: "{{ doc('invoice_line_item_tax_amt') }}"
+      - name: tax_rate
+        description: "{{ doc('tax_rate') }}"
+      - name: tax_jurisdiction
+        description: "{{ doc('tax_jurisdiction') }}"
+      - name: tax_inclusive_flag
+        description: "{{ doc('tax_inclusive_flag') }}"
+      - name: proration_flag
+        description: "{{ doc('proration_flag') }}"
+      - name: gift_card_line_item
+        description: "{{ doc('gift_card_line_item') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_stripe_invoices_vw
+    description: "{{ doc('stg_stripe_invoices_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: invoice_id
+        description: "{{ doc('invoice_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: status
+        description: "{{ doc('status') }}"
+      - name: collection_method
+        description: "{{ doc('collection_method') }}"
+      - name: billing_reason
+        description: "{{ doc('billing_reason') }}"
+      - name: total_amt
+        description: "{{ doc('total_amt') }}"
+      - name: tax_amt
+        description: "{{ doc('tax_amt') }}"
+      - name: due_amt
+        description: "{{ doc('due_amt') }}"
+      - name: paid_amt
+        description: "{{ doc('paid_amt') }}"
+      - name: remaining_amt
+        description: "{{ doc('remaining_amt') }}"
+      - name: invoice_pdf_url
+        description: "{{ doc('invoice_pdf_url') }}"
+      - name: paid_out_of_band_flag
+        description: "{{ doc('paid_out_of_band_flag') }}"
+      - name: is_gift_card_flag
+        description: "{{ doc('is_gift_card_flag') }}"
+      - name: created_by_admin_user_id
+        description: "{{ doc('created_by_admin_user_id') }}"
+      - name: invoice_created_datetime
+        description: "{{ doc('invoice_created_datetime') }}"
+      - name: paid_at_datetime
+        description: "{{ doc('paid_at_datetime') }}"
+      - name: voided_at_date
+        description: "{{ doc('voided_at_date') }}"
+      - name: marked_uncollectible_at_date
+        description: "{{ doc('marked_uncollectible_at_date') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+
+  - name: stg_stripe_subscription_history_vw
+    description: "{{ doc('stg_stripe_subscription_history_vw') }}"
+    columns:
+      - name: stripe_subscription_history_id
+        description: "{{ doc('stripe_subscription_history_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: cancel_at_period_end_previous_flag
+        description: "{{ doc('cancel_at_period_end_previous_flag') }}"
+      - name: cancel_at_period_end_current_falg
+        description: "{{ doc('cancel_at_period_end_current_falg') }}"
+      - name: status_previous
+        description: "{{ doc('status_previous') }}"
+      - name: status_current
+        description: "{{ doc('status_current') }}"
+      - name: billing_cycle_anchor_previous_date
+        description: "{{ doc('billing_cycle_anchor_previous_date') }}"
+      - name: billing_cycle_anchor_current_date
+        description: "{{ doc('billing_cycle_anchor_current_date') }}"
+      - name: cancel_at_previous_date
+        description: "{{ doc('cancel_at_previous_date') }}"
+      - name: cancel_at_current_date
+        description: "{{ doc('cancel_at_current_date') }}"
+      - name: canceled_at_previous_date
+        description: "{{ doc('canceled_at_previous_date') }}"
+      - name: canceled_at_current_date
+        description: "{{ doc('canceled_at_current_date') }}"
+      - name: coupon_id_previous
+        description: "{{ doc('coupon_id_previous') }}"
+      - name: coupon_id_current
+        description: "{{ doc('coupon_id_current') }}"
+      - name: promotion_code_id_previous
+        description: "{{ doc('promotion_code_id_previous') }}"
+      - name: promotion_code_id_current
+        description: "{{ doc('promotion_code_id_current') }}"
+      - name: tax_rate_previous
+        description: "{{ doc('tax_rate_previous') }}"
+      - name: tax_rate_current
+        description: "{{ doc('tax_rate_current') }}"
+      - name: downgrade_price_id_previous
+        description: "{{ doc('downgrade_price_id_previous') }}"
+      - name: downgrade_price_id_current
+        description: "{{ doc('downgrade_price_id_current') }}"
+      - name: downgrade_expiration_previous_date
+        description: "{{ doc('downgrade_expiration_previous_date') }}"
+      - name: downgrade_expiration_current_date
+        description: "{{ doc('downgrade_expiration_current_date') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+      - name: auto_cancel_date_current_date
+        description: "{{ doc('auto_cancel_date_current_date') }}"
+      - name: auto_cancel_date_previous_date
+        description: "{{ doc('auto_cancel_date_previous_date') }}"
+      - name: pause_request_date_current_date
+        description: "{{ doc('pause_request_date') }}"
+      - name: pause_request_date_previous_date
+        description: "{{ doc('pause_request_date_previous_date') }}"
+      - name: pause_effective_date_current_date
+        description: "{{ doc('pause_effective_date') }}"
+      - name: pause_effective_date_previous_date
+        description: "{{ doc('pause_effective_date_previous_date') }}"
+      - name: pause_end_date_current_date
+        description: "{{ doc('pause_end_date') }}"
+      - name: pause_end_date_previous_date
+        description: "{{ doc('pause_end_date_previous_date') }}"
+      - name: cancellation_details_reason_current
+        description: "{{ doc('cancellation_details_reason') }}"
+      - name: cancellation_details_reason_previous
+        description: "{{ doc('cancellation_details_reason_previous') }}"
+      - name: aaa_membership_number_current
+        description: "{{ doc('aaa_membership_number') }}"
+      - name: aaa_membership_number_previous
+        description: "{{ doc('aaa_membership_number_previous') }}"
+
+  - name: stg_stripe_subscription_item_history_vw
+    description: "{{ doc('stg_stripe_subscription_item_history_vw') }}"
+    columns:
+      - name: stripe_subscription_item_history_id
+        description: "{{ doc('stripe_subscription_item_history_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: subscription_item_id
+        description: "{{ doc('subscription_item_id') }}"
+      - name: price_id_previous
+        description: "{{ doc('price_id_previous') }}"
+      - name: price_id_current
+        description: "{{ doc('price_id_current') }}"
+      - name: quantity_previous
+        description: "{{ doc('quantity_previous') }}"
+      - name: quantity_current
+        description: "{{ doc('quantity_current') }}"
+      - name: tax_rate_previous
+        description: "{{ doc('tax_rate_previous') }}"
+      - name: tax_rate_current
+        description: "{{ doc('tax_rate_current') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_stripe_subscription_items_vw
+    description: "{{ doc('stg_stripe_subscription_items_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: subscription_item_id
+        description: "{{ doc('subscription_item_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: price_id
+        description: "{{ doc('price_id') }}"
+      - name: quantity
+        description: "{{ doc('quantity') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_stripe_subscriptions_vw
+    description: "{{ doc('stg_stripe_subscriptions_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: stripe_customer_id
+        description: "{{ doc('stripe_customer_id') }}"
+      - name: status
+        description: "{{ doc('status') }}"
+      - name: cancel_at_period_end_flag
+        description: "{{ doc('cancel_at_period_end_flag') }}"
+      - name: coupon_id
+        description: "{{ doc('coupon_id') }}"
+      - name: promotion_code_id
+        description: "{{ doc('promotion_code_id') }}"
+      - name: tax_rate
+        description: "{{ doc('tax_rate') }}"
+      - name: downgrade_price_id
+        description: "{{ doc('downgrade_price_id') }}"
+      - name: account_id
+        description: "{{ doc('account_id') }}"
+      - name: signup_zip_code
+        description: "{{ doc('signup_zip_code') }}"
+      - name: tax_location_override_id
+        description: "{{ doc('tax_location_override_id') }}"
+      - name: cancellation_details_reason
+        description: "{{ doc('cancellation_details_reason') }}"
+      - name: aaa_membership_number
+        description: "{{ doc('aaa_membership_number') }}"
+      - name: subscription_location_id
+        description: "{{ doc('subscription_location_id') }}"
+      - name: created_by_admin_id
+        description: "{{ doc('created_by_admin_id') }}"
+      - name: current_period_end_date
+        description: "{{ doc('current_period_end_date') }}"
+      - name: current_period_start_date
+        description: "{{ doc('current_period_start_date') }}"
+      - name: billing_cycle_anchor_date
+        description: "{{ doc('billing_cycle_anchor_date') }}"
+      - name: plan_cancel_request_date
+        description: "{{ doc('plan_cancel_request_date') }}"
+      - name: plan_cancel_scheduled_for_date
+        description: "{{ doc('plan_cancel_scheduled_for_date') }}"
+      - name: plan_end_date
+        description: "{{ doc('plan_end_date') }}"
+      - name: plan_start_date
+        description: "{{ doc('plan_start_date') }}"
+      - name: subscription_created_datetime
+        description: "{{ doc('subscription_created_datetime') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: downgrade_expiration_date
+        description: "{{ doc('downgrade_expiration_date') }}"
+      - name: auto_cancel_date
+        description: "{{ doc('auto_cancel_date') }}"
+      - name: pause_request_date
+        description: "{{ doc('pause_request_date') }}"
+      - name: pause_effective_date
+        description: "{{ doc('pause_effective_date') }}"
+      - name: pause_end_date
+        description: "{{ doc('pause_end_date') }}"
+      - name: pending_downgrade_date
+        description: "{{ doc('pending_downgrade_date') }}"
+      - name: subscription_unique_tenant_location_id
+        description: "{{ doc('subscription_unique_tenant_location_id') }}"
+      - name: new_status
+        description: "{{ doc('new_status') }}"
+      - name: override_location_id
+        description: "{{ doc('override_location_id') }}"
+      - name: override_unique_tenant_location_id
+        description: "{{ doc('override_unique_tenant_location_id') }}"
+      - name: signup_created_by_user_id
+        description: "{{ doc('signup_created_by_user_id') }}"
+      - name: signup_closest_location_id
+        description: "{{ doc('signup_closest_location_id') }}"
+      - name: signup_unique_tenant_location_id
+        description: "{{ doc('signup_unique_tenant_location_id') }}"
+      - name: migrated_pos_location_code
+        description: "{{ doc('migrated_pos_location_code') }}"
+      - name: migrated_unique_tenant_location_code
+        description: "{{ doc('migrated_unique_tenant_location_code') }}"
+      - name: migrated_plan_flag
+        description: "{{ doc('migrated_plan_flag') }}"
+      - name: license_plate_id
+        description: "{{ doc('license_plate_id') }}"
+
+  - name: stg_subscription_cancellations_vw
+    description: "{{ doc('stg_subscription_cancellations_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+        tests:
+          - not_null
+      - name: cancellation_id
+        description: "{{ doc('cancellation_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: cancellation_reason
+        description: "{{ doc('cancellation_reason') }}"
+      - name: cancellation_reason_category
+        description: "{{ doc('cancellation_reason_category') }}"
+      - name: cancellation_reason_subcategory
+        description: "{{ doc('cancellation_reason_subcategory') }}"
+      - name: cancellation_reason_details
+        description: "{{ doc('cancellation_reason_details') }}"
+      - name: cancellation_reason_other_details
+        description: "{{ doc('cancellation_reason_other_details') }}"
+      - name: cancellation_reason_source
+        description: "{{ doc('cancellation_reason_source') }}"
+      - name: cancellation_reason_source_details
+        description: "{{ doc('cancellation_reason_source_details') }}"
+      - name: cancellation_reason_source_other_details
+        description: "{{ doc('cancellation_reason_source_other_details') }}"
+      - name: cancellation_reason_source_category
+        description: "{{ doc('cancellation_reason_source_category') }}"
+      - name: cancellation_reason_source_subcategory
+        description: "{{ doc('cancellation_reason_source_subcategory') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_vehicle_history_vw
+    description: "{{ doc('stg_vehicle_history_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: vehicle_history_id
+        description: "{{ doc('vehicle_history_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: vehicle_id
+        description: "{{ doc('vehicle_id') }}"
+      - name: license_plate_id
+        description: "{{ doc('license_plate_id') }}"
+      - name: license_plate_number_previous
+        description: "{{ doc('license_plate_number_previous') }}"
+      - name: license_plate_number_current
+        description: "{{ doc('license_plate_number_current') }}"
+      - name: license_plate_state_previous
+        description: "{{ doc('license_plate_state_previous') }}"
+      - name: license_plate_state_current
+        description: "{{ doc('license_plate_state_current') }}"
+      - name: vehicle_make_previous
+        description: "{{ doc('vehicle_make_previous') }}"
+      - name: vehicle_make_current
+        description: "{{ doc('vehicle_make_current') }}"
+      - name: vehicle_model_previous
+        description: "{{ doc('vehicle_model_previous') }}"
+      - name: vehicle_model_current
+        description: "{{ doc('vehicle_model_current') }}"
+      - name: vehicle_year_previous
+        description: "{{ doc('vehicle_year_previous') }}"
+      - name: vehicle_year_current
+        description: "{{ doc('vehicle_year_current') }}"
+      - name: vehicle_color_previous
+        description: "{{ doc('vehicle_color_previous') }}"
+      - name: vehicle_color_current
+        description: "{{ doc('vehicle_color_current') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_vehicle_rfid_vw
+    description: "{{ doc('stg_vehicle_rfid_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: vehicle_rfid_id
+        description: "{{ doc('vehicle_rfid_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: vehicle_id
+        description: "{{ doc('vehicle_id') }}"
+      - name: rfid_tag_number
+        description: "{{ doc('rfid_tag_number') }}"
+      - name: rfid_tag_status
+        description: "{{ doc('rfid_tag_status') }}"
+      - name: rfid_tag_type
+        description: "{{ doc('rfid_tag_type') }}"
+      - name: rfid_tag_location_id
+        description: "{{ doc('rfid_tag_location_id') }}"
+      - name: rfid_tag_unique_tenant_location_id
+        description: "{{ doc('rfid_tag_unique_tenant_location_id') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+  - name: stg_vehicle_vw
+    description: "{{ doc('stg_vehicle_vw') }}"
+    columns:
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+        tests:
+          - not_null
+      - name: vehicle_id
+        description: "{{ doc('vehicle_id') }}"
+        tests:
+          - not_null
+          - unique
+      - name: license_plate_id
+        description: "{{ doc('license_plate_id') }}"
+      - name: license_plate_number
+        description: "{{ doc('license_plate_number') }}"
+      - name: license_plate_state
+        description: "{{ doc('license_plate_state') }}"
+      - name: vehicle_make
+        description: "{{ doc('vehicle_make') }}"
+      - name: vehicle_model
+        description: "{{ doc('vehicle_model') }}"
+      - name: vehicle_year
+        description: "{{ doc('vehicle_year') }}"
+      - name: vehicle_color
+        description: "{{ doc('vehicle_color') }}"
+      - name: created_datetime
+        description: "{{ doc('created_datetime') }}"
+      - name: created_date
+        description: "{{ doc('created_date') }}"
+      - name: last_modified_datetime
+        description: "{{ doc('last_modified_datetime') }}"
+      - name: last_modified_date
+        description: "{{ doc('last_modified_date') }}"
+
+# --- End of all models ---

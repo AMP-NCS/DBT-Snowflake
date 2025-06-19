@@ -888,4 +888,352 @@ Date when the invoice was voided.
 
 {% docs zip_code %}
 ZIP code of the location or user.
+{% enddocs %}
+
+{% docs account_type %}
+Type of the account.
+{% enddocs %}
+
+{% docs transaction_type_id %}
+Type of the transaction.
+{% enddocs %}
+
+{% docs mobile_user_activity_id %}
+Unique identifier for the mobile user activity record.
+{% enddocs %}
+
+{% docs autowash_location_id %}
+ID of the location where the activity occurred.
+{% enddocs %}
+
+{% docs duration %}
+Duration of the coupon.
+{% enddocs %}
+
+{% docs duration_in_months %}
+Duration in months.
+{% enddocs %}
+
+{% docs max_redemptions %}
+Maximum number of times the coupon can be redeemed.
+{% enddocs %}
+
+{% docs refund_flag %}
+Flag indicating if the transaction was refunded.
+{% enddocs %}
+
+{% docs LOCATION_ID %}
+Unique identifier for each location.
+{% enddocs %}
+
+{% docs TENANT_ID %}
+External identifier for the tenant to which the location belongs.
+{% enddocs %}
+
+{% docs LOCATION_NAME %}
+Human-readable name of the location.
+{% enddocs %}
+
+{% docs LOCATION_INTERNAL_NAME %}
+Internal system name used for identifying the location.
+{% enddocs %}
+
+{% docs LOCATION_IS_FRANCHISE %}
+Boolean flag indicating if the location is a franchise.
+{% enddocs %}
+
+{% docs TEST_LOCATION %}
+Boolean flag indicating if the location is a test/demo location.
+{% enddocs %}
+
+{% docs LOCATION_CODE %}
+Short internal code used for location identification.
+{% enddocs %}
+
+{% docs LOCATION_STREET1 %}
+Primary street address of the location.
+{% enddocs %}
+
+{% docs LOCATION_STREET2 %}
+Secondary address line, if available.
+{% enddocs %}
+
+{% docs LOCATION_CITY %}
+City where the location is situated.
+{% enddocs %}
+
+{% docs LOCATION_STATE %}
+State or region of the location.
+{% enddocs %}
+
+{% docs LOCATION_ZIP_CODE %}
+Postal ZIP code of the location.
+{% enddocs %}
+
+{% docs LOCATION_IMAGE_URL %}
+Image URL or visual representation of the location.
+{% enddocs %}
+
+{% docs LOCATION_CREATED_DATETIME %}
+Timestamp when the location record was first created.
+{% enddocs %}
+
+{% docs ROW_LEVEL_SECURITY_ID %}
+Identifier used for enforcing row-level security by tenant or hierarchy.
+{% enddocs %}
+
+{% docs pause_request_date %}
+Date when pause was requested.
+{% enddocs %}
+
+{% docs pause_effective_date %}
+Date when pause is effective.
+{% enddocs %}
+
+{% docs pause_end_date %}
+Date when pause ends.
+{% enddocs %}
+
+{% docs vehicle_make %}
+Make of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_model %}
+Model of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_year %}
+Year of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_color %}
+Color of the vehicle.
+{% enddocs %}
+
+{% docs rfid_tag_number %}
+RFID tag number assigned to the vehicle.
+{% enddocs %}
+
+{% docs rfid_tag_status %}
+Status of the RFID tag.
+{% enddocs %}
+
+{% docs rfid_tag_type %}
+Type of the RFID tag.
+{% enddocs %}
+
+{% docs rfid_tag_location_id %}
+Location ID where the RFID tag was assigned.
+{% enddocs %}
+
+{% docs rfid_tag_unique_tenant_location_id %}
+Unique tenant-location ID for the RFID tag assignment.
+{% enddocs %}
+
+{% docs stripe_subscription_item_history_id %}
+Unique identifier for the subscription item history record.
+{% enddocs %}
+
+{% docs cancellation_reason %}
+Reason for cancellation.
+{% enddocs %}
+
+{% docs cancellation_reason_category %}
+Category of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_subcategory %}
+Subcategory of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_details %}
+Detailed description of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_other_details %}
+Additional details for other cancellation reasons.
+{% enddocs %}
+
+{% docs cancellation_reason_source %}
+Source of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_source_details %}
+Detailed description of the cancellation reason source.
+{% enddocs %}
+
+{% docs cancellation_reason_source_other_details %}
+Additional details for other cancellation reason sources.
+{% enddocs %}
+
+{% docs cancellation_reason_source_category %}
+Category of the cancellation reason source.
+{% enddocs %}
+
+{% docs cancellation_reason_source_subcategory %}
+Subcategory of the cancellation reason source.
+{% enddocs %}
+
+{% docs override_location_id %}
+Override location ID.
+{% enddocs %}
+
+{% docs override_unique_tenant_location_id %}
+Unique tenant-location ID for the override.
+{% enddocs %}
+
+{% docs pending_downgrade_date %}
+Date when downgrade is pending.
+{% enddocs %}
+
+{% docs subscription_created_datetime %}
+Timestamp when the subscription was created.
+{% enddocs %}
+
+{% docs cancel_at_period_end_previous_flag %}
+Flag for previous cancel at period end.
+{% enddocs %}
+
+{% docs cancel_at_period_end_current_falg %}
+Flag for current cancel at period end.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_previous_date %}
+Previous billing cycle anchor date.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_current_date %}
+Current billing cycle anchor date.
+{% enddocs %}
+
+{% docs cancel_at_previous_date %}
+Previous cancel at date.
+{% enddocs %}
+
+{% docs cancel_at_current_date %}
+Current cancel at date.
+{% enddocs %}
+
+{% docs canceled_at_previous_date %}
+Previous canceled at date.
+{% enddocs %}
+
+{% docs canceled_at_current_date %}
+Current canceled at date.
+{% enddocs %}
+
+{% docs tax_rate_previous %}
+Previous tax rate.
+{% enddocs %}
+
+{% docs tax_rate_current %}
+Current tax rate.
+{% enddocs %}
+
+{% docs downgrade_price_id_previous %}
+Previous downgrade price ID.
+{% enddocs %}
+
+{% docs downgrade_price_id_current %}
+Current downgrade price ID.
+{% enddocs %}
+
+{% docs downgrade_expiration_previous_date %}
+Previous downgrade expiration date.
+{% enddocs %}
+
+{% docs downgrade_expiration_current_date %}
+Current downgrade expiration date.
+{% enddocs %}
+
+{% docs auto_cancel_date_current_date %}
+Current auto cancel date.
+{% enddocs %}
+
+{% docs auto_cancel_date_previous_date %}
+Previous auto cancel date.
+{% enddocs %}
+
+{% docs pause_request_date_previous_date %}
+Previous pause request date.
+{% enddocs %}
+
+{% docs pause_effective_date_previous_date %}
+Previous pause effective date.
+{% enddocs %}
+
+{% docs pause_end_date_previous_date %}
+Previous pause end date.
+{% enddocs %}
+
+{% docs cancellation_details_reason_previous %}
+Previous cancellation reason.
+{% enddocs %}
+
+{% docs aaa_membership_number_previous %}
+Previous AAA membership number.
+{% enddocs %}
+
+{% docs price_id_previous %}
+Previous price ID.
+{% enddocs %}
+
+{% docs price_id_current %}
+Current price ID.
+{% enddocs %}
+
+{% docs quantity_previous %}
+Previous quantity.
+{% enddocs %}
+
+{% docs quantity_current %}
+Current quantity.
+{% enddocs %}
+
+{% docs license_plate_number_previous %}
+Previous license plate number.
+{% enddocs %}
+
+{% docs license_plate_number_current %}
+Current license plate number.
+{% enddocs %}
+
+{% docs license_plate_state_previous %}
+Previous license plate state.
+{% enddocs %}
+
+{% docs license_plate_state_current %}
+Current license plate state.
+{% enddocs %}
+
+{% docs vehicle_make_previous %}
+Previous vehicle make.
+{% enddocs %}
+
+{% docs vehicle_make_current %}
+Current vehicle make.
+{% enddocs %}
+
+{% docs vehicle_model_previous %}
+Previous vehicle model.
+{% enddocs %}
+
+{% docs vehicle_model_current %}
+Current vehicle model.
+{% enddocs %}
+
+{% docs vehicle_year_previous %}
+Previous vehicle year.
+{% enddocs %}
+
+{% docs vehicle_year_current %}
+Current vehicle year.
+{% enddocs %}
+
+{% docs vehicle_color_previous %}
+Previous vehicle color.
+{% enddocs %}
+
+{% docs vehicle_color_current %}
+Current vehicle color.
 {% enddocs %} 
