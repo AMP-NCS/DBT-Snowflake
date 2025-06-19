@@ -162,12 +162,8 @@ Unique identifier for the Autowash Account.
 External ID of the primary account holder user.
 {% enddocs %}
 
-{% docs billing_cycle_anchor_date %}
-Billing cycle anchor date.
-{% enddocs %}
-
 {% docs billing_reason %}
-Reason for billing.
+Reason for generating the invoice or billing event.
 {% enddocs %}
 
 {% docs cancel_at_period_end_flag %}
@@ -335,7 +331,7 @@ Type of the event.
 {% enddocs %}
 
 {% docs failure_message %}
-Generic failure message for any failed operation or transaction.
+Detailed message explaining the reason for a failure.
 {% enddocs %}
 
 {% docs gift_card_id %}
@@ -703,7 +699,7 @@ Row number for ordering.
 {% enddocs %}
 
 {% docs rfid %}
-RFID value.
+RFID tag identifier used for vehicle identification and access control.
 {% enddocs %}
 
 {% docs signup_closest_location_id %}
@@ -863,7 +859,7 @@ Value of the gift card promotion (in dollars).
 {% enddocs %}
 
 {% docs vehicle_history_id %}
-Unique identifier for the vehicle history record.
+Unique identifier for a vehicle history record.
 {% enddocs %}
 
 {% docs vehicle_id %}
@@ -1215,7 +1211,7 @@ Subscription status before it was canceled.
 {% enddocs %}
 
 {% docs first_invoice_subtotal_amt %}
-Subtotal amount of the first invoice.
+Subtotal amount of the first invoice before any discounts or adjustments.
 {% enddocs %}
 
 {% docs first_invoice_discount_amt %}
@@ -1223,7 +1219,7 @@ Discount amount applied to the first invoice.
 {% enddocs %}
 
 {% docs first_invoice_amt %}
-Net amount of the first invoice after discounts.
+Net amount of the first invoice after all discounts and adjustments.
 {% enddocs %}
 
 {% docs first_invoice_created_date %}
@@ -1284,10 +1280,6 @@ Subtotal amount before discounts and taxes.
 
 {% docs discount_amt %}
 Discount amount applied to the transaction.
-{% enddocs %}
-
-{% docs billing_cycle_anchor_date %}
-Date that determines the billing cycle schedule.
 {% enddocs %}
 
 {% docs billing_reason %}
@@ -1363,7 +1355,7 @@ Subscription status before it was canceled.
 {% enddocs %}
 
 {% docs first_invoice_subtotal_amt %}
-Subtotal amount of the first invoice.
+Subtotal amount of the first invoice before any discounts or adjustments.
 {% enddocs %}
 
 {% docs first_invoice_discount_amt %}
@@ -1371,7 +1363,7 @@ Discount amount applied to the first invoice.
 {% enddocs %}
 
 {% docs first_invoice_amt %}
-Net amount of the first invoice after discounts.
+Net amount of the first invoice after all discounts and adjustments.
 {% enddocs %}
 
 {% docs first_invoice_created_date %}
@@ -1435,7 +1427,7 @@ Discount amount applied to the transaction.
 {% enddocs %}
 
 {% docs billing_cycle_anchor_date %}
-Date that determines the billing cycle schedule.
+The date that determines when a subscription's billing cycle starts and resets. This date is used to calculate future billing dates and subscription periods.
 {% enddocs %}
 
 {% docs billing_reason %}
