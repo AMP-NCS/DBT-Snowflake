@@ -1,45 +1,5 @@
 {{ config(materialized='view') }}
 
-WITH
-    vehicle AS (
-        SELECT *
-        FROM {{ ref('stg_vehicle_vw') }}
-    ),
-
-    lp_first_sub AS (
-        SELECT
-            tenant_id,
-            license_plate_number,
-            license_plate_state,
-            license_plate_id,
-            subscription_id,
-            row_number() OVER (
-                PARTITION BY tenant_id, concat(license_plate_number, ',', license_plate_state)
-                ORDER BY vehicle_history_id ASC
-            ) AS row_num
-        FROM {{ ref('stg_vehicle_history_vw') }}
-        QUALIFY row_num = 1
-    ),
-
-    lp_legacy_subs AS (
-        SELECT
-            tenant_id,
-            license_plate_number
-        FROM {{ ref('stg_internal_legacy_reactivation_vw') }}
-    ),
-
-    most_recent_rfid AS (
-        SELECT
-            vehicle_id,
-            rfid,
-            row_number() OVER (
-                PARTITION BY vehicle_id
-                ORDER BY vehicle_rfid_id DESC
-            ) AS row_num
-        FROM {{ ref('stg_vehicle_rfid_vw') }}
-        QUALIFY row_num = 1
-    )
-
 SELECT
     v.subscription_id,
     v.vehicle_id,
@@ -47,18 +7,49 @@ SELECT
     v.license_plate_state,
     v.tenant_id,
     v.license_plate_id,
-    lfs.subscription_id      AS first_subscription_id_for_plate,
-    lls.license_plate_number AS is_legacy_reactivation,
-    mrf.rfid                 AS most_recent_rfid
-FROM vehicle AS v
-    LEFT OUTER JOIN lp_first_sub AS lfs
+
+    -- first subscription per plate
+    lfs.first_subscription_id_for_plate,
+
+    -- legacy reactivation flag (TRUE if we found a match)
+    coalesce (lls.license_plate_number IS NOT NULL, FALSE)
+        AS is_legacy_reactivation,
+
+    -- most recent RFID
+    mrf.rfid                                               AS most_recent_rfid
+
+    -- current_timestamp()                                    AS table_updated_at
+
+FROM {{ ref('stg_vehicle_vw') }} AS v
+
+-- first‐subscription per plate
+    LEFT OUTER JOIN (
+        SELECT
+            tenant_id,
+            license_plate_id,
+            subscription_id AS first_subscription_id_for_plate
+        FROM {{ ref('stg_vehicle_history_vw') }}
+        WHERE subscription_id IS NOT NULL
+        QUALIFY row_number() OVER (PARTITION BY tenant_id, license_plate_id ORDER BY vehicle_history_id ASC) = 1
+    ) lfs
         ON
-            v.license_plate_id = lfs.license_plate_id
-            AND v.tenant_id = lfs.tenant_id
-    LEFT OUTER JOIN lp_legacy_subs AS lls
+            v.tenant_id = lfs.tenant_id
+            AND v.license_plate_id = lfs.license_plate_id
+
+    -- legacy reactivation lookup
+    LEFT OUTER JOIN {{ ref('stg_internal_legacy_reactivation_vw') }} AS lls
         ON
-            v.license_plate_number = lls.license_plate_number
-            AND v.tenant_id = lls.tenant_id
-    LEFT OUTER JOIN most_recent_rfid AS mrf
+            v.tenant_id = lls.tenant_id
+            AND v.license_plate_number = lls.license_plate_number
+
+    -- most‐recent RFID per vehicle
+    LEFT OUTER JOIN (
+        SELECT
+            vehicle_id,
+            rfid
+        FROM {{ ref('stg_vehicle_rfid_vw') }}
+        QUALIFY row_number() OVER (PARTITION BY vehicle_id ORDER BY vehicle_rfid_id DESC) = 1
+    ) AS mrf
         ON v.vehicle_id = mrf.vehicle_id
+
 WHERE v.subscription_id IS NOT NULL
