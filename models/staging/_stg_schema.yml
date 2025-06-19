@@ -289,47 +289,6 @@ models:
       - name: zip_code
         description: "{{ doc('zip_code') }}"
 
-  - name: STG_REF_LOCATIONS_TBL
-    description: "{{ doc('STG_REF_LOCATIONS_TBL') }}"
-    columns:
-      - name: LOCATION_ID
-        description: "{{ doc('LOCATION_ID') }}"
-        tests:
-          - not_null
-          - unique
-      - name: TENANT_ID
-        description: "{{ doc('TENANT_ID') }}"
-        tests:
-          - not_null
-      - name: LOCATION_NAME
-        description: "{{ doc('LOCATION_NAME') }}"
-      - name: LOCATION_INTERNAL_NAME
-        description: "{{ doc('LOCATION_INTERNAL_NAME') }}"
-      - name: LOCATION_IS_FRANCHISE
-        description: "{{ doc('LOCATION_IS_FRANCHISE') }}"
-      - name: TEST_LOCATION
-        description: "{{ doc('TEST_LOCATION') }}"
-      - name: LOCATION_CODE
-        description: "{{ doc('LOCATION_CODE') }}"
-      - name: LOCATION_STREET1
-        description: "{{ doc('LOCATION_STREET1') }}"
-      - name: LOCATION_STREET2
-        description: "{{ doc('LOCATION_STREET2') }}"
-      - name: LOCATION_CITY
-        description: "{{ doc('LOCATION_CITY') }}"
-      - name: LOCATION_STATE
-        description: "{{ doc('LOCATION_STATE') }}"
-      - name: LOCATION_ZIP_CODE
-        description: "{{ doc('LOCATION_ZIP_CODE') }}"
-      - name: LOCATION_IMAGE_URL
-        description: "{{ doc('LOCATION_IMAGE_URL') }}"
-      - name: LOCATION_CREATED_DATETIME
-        description: "{{ doc('LOCATION_CREATED_DATETIME') }}"
-      - name: LAST_MODIFIED_DATETIME
-        description: "{{ doc('last_modified_datetime') }}"
-      - name: ROW_LEVEL_SECURITY_ID
-        description: "{{ doc('ROW_LEVEL_SECURITY_ID') }}"
-
   - name: stg_stripe_charges_vw
     description: "{{ doc('stg_stripe_charges_vw') }}"
     columns:
