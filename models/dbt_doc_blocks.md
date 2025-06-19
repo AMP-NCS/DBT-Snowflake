@@ -110,12 +110,24 @@ Staging model for vehicle data from GENERAL.VEHICLE. Contains vehicle, account, 
 
 ## Column Docs
 
+{% docs aaa_membership_number %}
+AAA membership number.
+{% enddocs %}
+
+{% docs aaa_membership_number_previous %}
+Previous AAA membership number.
+{% enddocs %}
+
 {% docs account_external_id %}
 External ID for the account.
 {% enddocs %}
 
 {% docs account_id %}
 ID of the account.
+{% enddocs %}
+
+{% docs account_type %}
+Type of the account.
 {% enddocs %}
 
 {% docs active_flag %}
@@ -130,6 +142,10 @@ ID of the active subscription.
 Flag indicating if pay-per-wash is allowed.
 {% enddocs %}
 
+{% docs amount_off_amt %}
+Amount off (in dollars).
+{% enddocs %}
+
 {% docs amp_product_id %}
 AMP product ID.
 {% enddocs %}
@@ -138,36 +154,80 @@ AMP product ID.
 AMP product price ID.
 {% enddocs %}
 
-{% docs amount_off_amt %}
-Amount off (in dollars).
-{% enddocs %}
-
-{% docs aaa_membership_number %}
-AAA membership number.
-{% enddocs %}
-
 {% docs auto_cancel_date %}
 Date when auto cancel is set.
+{% enddocs %}
+
+{% docs auto_cancel_date_current_date %}
+Current auto cancel date.
+{% enddocs %}
+
+{% docs auto_cancel_date_previous_date %}
+Previous auto cancel date.
 {% enddocs %}
 
 {% docs auto_cancel_flg %}
 Flag indicating if the coupon auto-cancels.
 {% enddocs %}
 
+{% docs autowash_account_holder_user_id %}
+External ID of the primary account holder user.
+{% enddocs %}
+
 {% docs autowash_account_id %}
 Unique identifier for the Autowash Account.
 {% enddocs %}
 
-{% docs autowash_account_holder_user_id %}
-External ID of the primary account holder user.
+{% docs autowash_location_id %}
+ID of the location where the activity occurred.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_current_date %}
+Current billing cycle anchor date.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_date %}
+The date that determines when a subscription's billing cycle starts and resets. This date is used to calculate future billing dates and subscription periods.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_previous_date %}
+Previous billing cycle anchor date.
 {% enddocs %}
 
 {% docs billing_reason %}
 Reason for generating the invoice or billing event.
 {% enddocs %}
 
+{% docs cancel_at_current_date %}
+Current cancel at date.
+{% enddocs %}
+
+{% docs cancel_at_period_end_current_falg %}
+Flag for current cancel at period end.
+{% enddocs %}
+
 {% docs cancel_at_period_end_flag %}
 Flag indicating if the subscription is set to cancel at period end.
+{% enddocs %}
+
+{% docs cancel_at_period_end_previous_flag %}
+Flag for previous cancel at period end.
+{% enddocs %}
+
+{% docs cancel_at_previous_date %}
+Previous cancel at date.
+{% enddocs %}
+
+{% docs canceled_at_current_date %}
+Current canceled at date.
+{% enddocs %}
+
+{% docs canceled_at_previous_date %}
+Previous canceled at date.
+{% enddocs %}
+
+{% docs canceled_user_id %}
+ID of the user who canceled the subscription.
 {% enddocs %}
 
 {% docs cancellation_comment %}
@@ -182,6 +242,10 @@ User ID who created the cancellation.
 Detailed explanation of the cancellation reason, including specific circumstances.
 {% enddocs %}
 
+{% docs cancellation_details_reason_previous %}
+Previous cancellation reason.
+{% enddocs %}
+
 {% docs cancellation_id %}
 Unique identifier for the cancellation.
 {% enddocs %}
@@ -194,8 +258,56 @@ User ID who last modified the cancellation.
 Name/code for the cancellation.
 {% enddocs %}
 
+{% docs cancellation_reason %}
+General reason provided for cancellation, used across different cancellation types.
+{% enddocs %}
+
+{% docs cancellation_reason_category %}
+Category of the cancellation reason.
+{% enddocs %}
+
 {% docs cancellation_reason_code %}
 Reason code for the cancellation.
+{% enddocs %}
+
+{% docs cancellation_reason_details %}
+Detailed description of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_other_details %}
+Additional details for other cancellation reasons.
+{% enddocs %}
+
+{% docs cancellation_reason_picklist_id %}
+ID of the picklist value representing the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_source %}
+Source of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_source_category %}
+Category of the cancellation reason source.
+{% enddocs %}
+
+{% docs cancellation_reason_source_details %}
+Detailed description of the cancellation reason source.
+{% enddocs %}
+
+{% docs cancellation_reason_source_other_details %}
+Additional details for other cancellation reason sources.
+{% enddocs %}
+
+{% docs cancellation_reason_source_subcategory %}
+Subcategory of the cancellation reason source.
+{% enddocs %}
+
+{% docs cancellation_reason_subcategory %}
+Subcategory of the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_text %}
+Text description of the cancellation reason from the picklist.
 {% enddocs %}
 
 {% docs categorized_rls_id %}
@@ -222,12 +334,12 @@ ID of the checkout.
 City of the location.
 {% enddocs %}
 
-{% docs color_id %}
-Color ID.
-{% enddocs %}
-
 {% docs collection_method %}
 Collection method for the invoice.
+{% enddocs %}
+
+{% docs color_id %}
+Color ID.
 {% enddocs %}
 
 {% docs coupon_id %}
@@ -302,20 +414,48 @@ Flag indicating if the coupon is deleted.
 Description of the line item.
 {% enddocs %}
 
+{% docs discount_amt %}
+Discount amount applied to the transaction.
+{% enddocs %}
+
 {% docs disputed_flag %}
 Flag indicating if the charge is disputed.
+{% enddocs %}
+
+{% docs downgrade_expiration_current_date %}
+Current downgrade expiration date.
 {% enddocs %}
 
 {% docs downgrade_expiration_date %}
 Date when downgrade expires.
 {% enddocs %}
 
+{% docs downgrade_expiration_previous_date %}
+Previous downgrade expiration date.
+{% enddocs %}
+
 {% docs downgrade_price_id %}
 ID of the downgrade price.
 {% enddocs %}
 
+{% docs downgrade_price_id_current %}
+Current downgrade price ID.
+{% enddocs %}
+
+{% docs downgrade_price_id_previous %}
+Previous downgrade price ID.
+{% enddocs %}
+
 {% docs due_amt %}
 Amount due (in dollars).
+{% enddocs %}
+
+{% docs duration %}
+Duration of the coupon.
+{% enddocs %}
+
+{% docs duration_in_months %}
+Duration in months.
 {% enddocs %}
 
 {% docs email %}
@@ -330,8 +470,40 @@ Employee ID if the user is an employee.
 Type of the event.
 {% enddocs %}
 
+{% docs failure_code %}
+Error code associated with a failed transaction or operation.
+{% enddocs %}
+
 {% docs failure_message %}
 Detailed message explaining the reason for a failure.
+{% enddocs %}
+
+{% docs first_invoice_amt %}
+Net amount of the first invoice after all discounts and adjustments.
+{% enddocs %}
+
+{% docs first_invoice_created_date %}
+Date when the first invoice was created.
+{% enddocs %}
+
+{% docs first_invoice_created_datetime %}
+Timestamp when the first invoice was created.
+{% enddocs %}
+
+{% docs first_invoice_discount_amt %}
+Discount amount applied to the first invoice.
+{% enddocs %}
+
+{% docs first_invoice_subtotal_amt %}
+Subtotal amount of the first invoice before any discounts or adjustments.
+{% enddocs %}
+
+{% docs first_subscription_id_for_plate %}
+ID of the first subscription associated with a license plate.
+{% enddocs %}
+
+{% docs first_wash_location_id %}
+ID of the location where the subscription's first wash occurred.
 {% enddocs %}
 
 {% docs gift_card_id %}
@@ -426,8 +598,24 @@ Flag indicating if the invoice is for a gift card.
 Flag indicating if the purchase was made by a guest.
 {% enddocs %}
 
+{% docs is_legacy_reactivation %}
+Flag indicating if the subscription is a reactivation of a legacy subscription.
+{% enddocs %}
+
 {% docs is_temp_tag_flag %}
 Flag indicating if the vehicle has a temporary tag.
+{% enddocs %}
+
+{% docs last_charge_failure_card_funding %}
+Funding type of the card used in the most recent failed charge attempt.
+{% enddocs %}
+
+{% docs last_charge_failure_code %}
+Error code from the most recent failed charge attempt.
+{% enddocs %}
+
+{% docs last_charge_failure_message %}
+Error message from the most recent failed charge attempt.
 {% enddocs %}
 
 {% docs last_modified_by_user_id %}
@@ -442,6 +630,10 @@ Date when the record was last modified.
 Timestamp when the record was last modified.
 {% enddocs %}
 
+{% docs last_wash_location_id %}
+ID of the location where the subscription's most recent wash occurred.
+{% enddocs %}
+
 {% docs license_plate_id %}
 Combined license plate number and state.
 {% enddocs %}
@@ -450,8 +642,36 @@ Combined license plate number and state.
 License plate number.
 {% enddocs %}
 
+{% docs license_plate_number_current %}
+Current license plate number.
+{% enddocs %}
+
+{% docs license_plate_number_previous %}
+Previous license plate number.
+{% enddocs %}
+
 {% docs license_plate_state %}
 State of the license plate.
+{% enddocs %}
+
+{% docs license_plate_state_current %}
+Current license plate state.
+{% enddocs %}
+
+{% docs license_plate_state_previous %}
+Previous license plate state.
+{% enddocs %}
+
+{% docs LOCATION_CODE %}
+Short internal code used for location identification.
+{% enddocs %}
+
+{% docs LOCATION_CREATED_DATETIME %}
+Timestamp when the location record was first created.
+{% enddocs %}
+
+{% docs LOCATION_IS_FRANCHISE %}
+Boolean flag indicating if the location is a franchise.
 {% enddocs %}
 
 {% docs location_city %}
@@ -502,6 +722,10 @@ Postal ZIP code of the location.
 Date when the invoice was marked uncollectible.
 {% enddocs %}
 
+{% docs max_redemptions %}
+Maximum number of times the coupon can be redeemed.
+{% enddocs %}
+
 {% docs migrated_plan_flag %}
 Flag indicating if the plan was migrated.
 {% enddocs %}
@@ -514,8 +738,16 @@ Migrated POS location code.
 Unique tenant-location code for the migration.
 {% enddocs %}
 
+{% docs mobile_user_activity_id %}
+Unique identifier for the mobile user activity record.
+{% enddocs %}
+
 {% docs model_label_override %}
 Model label override.
+{% enddocs %}
+
+{% docs most_recent_rfid %}
+Most recent RFID tag assigned to the vehicle.
 {% enddocs %}
 
 {% docs name %}
@@ -526,8 +758,20 @@ Name of the account or user.
 Calculated new status for the subscription.
 {% enddocs %}
 
+{% docs number_of_paid_invoices_to_date %}
+Total count of paid invoices for the subscription.
+{% enddocs %}
+
 {% docs ordinal %}
 Ordinal position of the picklist value.
+{% enddocs %}
+
+{% docs override_location_id %}
+Override location ID.
+{% enddocs %}
+
+{% docs override_unique_tenant_location_id %}
+Unique tenant-location ID for the override.
 {% enddocs %}
 
 {% docs paid_amt %}
@@ -542,8 +786,40 @@ Datetime when the invoice was paid.
 Flag indicating if the invoice was paid out of band.
 {% enddocs %}
 
+{% docs pause_effective_date %}
+Date when pause is effective.
+{% enddocs %}
+
+{% docs pause_effective_date_previous_date %}
+Previous pause effective date.
+{% enddocs %}
+
+{% docs pause_end_date %}
+Date when pause ends.
+{% enddocs %}
+
+{% docs pause_end_date_previous_date %}
+Previous pause end date.
+{% enddocs %}
+
+{% docs pause_request_date %}
+Date when pause was requested.
+{% enddocs %}
+
+{% docs pause_request_date_previous_date %}
+Previous pause request date.
+{% enddocs %}
+
+{% docs payment_method_details_card_funding %}
+Funding type of the payment card (credit, debit, prepaid, etc.).
+{% enddocs %}
+
 {% docs payment_method_id %}
 ID of the payment method.
+{% enddocs %}
+
+{% docs pending_downgrade_date %}
+Date when downgrade is pending.
 {% enddocs %}
 
 {% docs percent_off %}
@@ -602,24 +878,16 @@ Name of the price group.
 ID of the price.
 {% enddocs %}
 
+{% docs price_id_current %}
+Current price ID.
+{% enddocs %}
+
+{% docs price_id_previous %}
+Previous price ID.
+{% enddocs %}
+
 {% docs primary_account_holder_user_id %}
 External ID of the primary account holder user.
-{% enddocs %}
-
-{% docs proration_flag %}
-Flag indicating if the line item is a proration.
-{% enddocs %}
-
-{% docs product_category %}
-Category of the product.
-{% enddocs %}
-
-{% docs product_id %}
-ID of the product.
-{% enddocs %}
-
-{% docs product_name %}
-Name of the product.
 {% enddocs %}
 
 {% docs promo_code_id %}
@@ -642,6 +910,22 @@ Previous promotion code ID.
 Unique identifier for the promotion.
 {% enddocs %}
 
+{% docs proration_flag %}
+Flag indicating if the line item is a proration.
+{% enddocs %}
+
+{% docs product_category %}
+Category of the product.
+{% enddocs %}
+
+{% docs product_id %}
+ID of the product.
+{% enddocs %}
+
+{% docs product_name %}
+Name of the product.
+{% enddocs %}
+
 {% docs purchase_price_amt %}
 Purchase price of the gift card promotion (in dollars).
 {% enddocs %}
@@ -662,6 +946,18 @@ ID of the user who made the purchase.
 Quantity for the line item or subscription item.
 {% enddocs %}
 
+{% docs quantity_current %}
+Current quantity.
+{% enddocs %}
+
+{% docs quantity_previous %}
+Previous quantity.
+{% enddocs %}
+
+{% docs record_created_datetime %}
+Timestamp when the record was created.
+{% enddocs %}
+
 {% docs recurring_inverval %}
 Recurring interval for the price.
 {% enddocs %}
@@ -674,8 +970,8 @@ Datetime by which the coupon must be redeemed.
 ID of the user who redeemed the gift card.
 {% enddocs %}
 
-{% docs record_created_datetime %}
-Timestamp when the record was created.
+{% docs refund_flag %}
+Flag indicating if the transaction was refunded.
 {% enddocs %}
 
 {% docs refunded_amt %}
@@ -690,16 +986,36 @@ Flag indicating if the charge was refunded.
 Amount remaining (in dollars).
 {% enddocs %}
 
+{% docs rfid %}
+RFID tag identifier used for vehicle identification and access control.
+{% enddocs %}
+
+{% docs rfid_tag_location_id %}
+Location ID where the RFID tag was assigned.
+{% enddocs %}
+
+{% docs rfid_tag_number %}
+RFID tag number assigned to the vehicle.
+{% enddocs %}
+
+{% docs rfid_tag_status %}
+Status of the RFID tag.
+{% enddocs %}
+
+{% docs rfid_tag_type %}
+Type of the RFID tag.
+{% enddocs %}
+
+{% docs rfid_tag_unique_tenant_location_id %}
+Unique tenant-location ID for the RFID tag assignment.
+{% enddocs %}
+
 {% docs row_level_security_id %}
 Row-level security identifier.
 {% enddocs %}
 
 {% docs row_num %}
 Row number for ordering.
-{% enddocs %}
-
-{% docs rfid %}
-RFID tag identifier used for vehicle identification and access control.
 {% enddocs %}
 
 {% docs signup_closest_location_id %}
@@ -728,6 +1044,10 @@ Status of the charge, invoice, or subscription.
 
 {% docs status_current %}
 Current status.
+{% enddocs %}
+
+{% docs status_pre_cancel %}
+Subscription status before it was canceled.
 {% enddocs %}
 
 {% docs status_previous %}
@@ -770,8 +1090,16 @@ Unique identifier for the subscription history record.
 Stripe subscription ID associated with the account.
 {% enddocs %}
 
+{% docs stripe_subscription_item_history_id %}
+Unique identifier for the subscription item history record.
+{% enddocs %}
+
 {% docs subscription_cancellation_external_id %}
 External ID for the subscription cancellation.
+{% enddocs %}
+
+{% docs subscription_created_datetime %}
+Timestamp when the subscription was created.
 {% enddocs %}
 
 {% docs subscription_id %}
@@ -794,6 +1122,10 @@ Status of the subscription.
 Unique tenant-location ID for the subscription.
 {% enddocs %}
 
+{% docs subtotal_amt %}
+Subtotal amount before discounts and taxes.
+{% enddocs %}
+
 {% docs tax_amt %}
 Tax amount (in dollars).
 {% enddocs %}
@@ -814,8 +1146,20 @@ Tax location override ID.
 Tax rate for the subscription or line item.
 {% enddocs %}
 
+{% docs tax_rate_current %}
+Current tax rate.
+{% enddocs %}
+
+{% docs tax_rate_previous %}
+Previous tax rate.
+{% enddocs %}
+
 {% docs tenant_id %}
 External identifier for the tenant.
+{% enddocs %}
+
+{% docs TEST_LOCATION %}
+Boolean flag indicating if the location is a test/demo location.
 {% enddocs %}
 
 {% docs tier1_amt %}
@@ -838,6 +1182,10 @@ Tier 4 price amount.
 Total amount of the invoice (in dollars).
 {% enddocs %}
 
+{% docs transaction_type_id %}
+Type of the transaction.
+{% enddocs %}
+
 {% docs transfer_date %}
 Date when the vehicle was transferred.
 {% enddocs %}
@@ -858,6 +1206,18 @@ ID of the user.
 Value of the gift card promotion (in dollars).
 {% enddocs %}
 
+{% docs vehicle_color %}
+Color of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_color_current %}
+Current vehicle color.
+{% enddocs %}
+
+{% docs vehicle_color_previous %}
+Previous vehicle color.
+{% enddocs %}
+
 {% docs vehicle_history_id %}
 Unique identifier for a vehicle history record.
 {% enddocs %}
@@ -866,8 +1226,44 @@ Unique identifier for a vehicle history record.
 ID of the vehicle.
 {% enddocs %}
 
+{% docs vehicle_make %}
+Make of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_make_current %}
+Current vehicle make.
+{% enddocs %}
+
+{% docs vehicle_make_previous %}
+Previous vehicle make.
+{% enddocs %}
+
+{% docs vehicle_model %}
+Model of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_model_current %}
+Current vehicle model.
+{% enddocs %}
+
+{% docs vehicle_model_previous %}
+Previous vehicle model.
+{% enddocs %}
+
 {% docs vehicle_rfid_id %}
 Unique identifier for the vehicle RFID record.
+{% enddocs %}
+
+{% docs vehicle_year %}
+Year of the vehicle.
+{% enddocs %}
+
+{% docs vehicle_year_current %}
+Current vehicle year.
+{% enddocs %}
+
+{% docs vehicle_year_previous %}
+Previous vehicle year.
 {% enddocs %}
 
 {% docs vif_id %}
@@ -884,426 +1280,6 @@ Date when the invoice was voided.
 
 {% docs zip_code %}
 ZIP code of the location or user.
-{% enddocs %}
-
-{% docs account_type %}
-Type of the account.
-{% enddocs %}
-
-{% docs transaction_type_id %}
-Type of the transaction.
-{% enddocs %}
-
-{% docs mobile_user_activity_id %}
-Unique identifier for the mobile user activity record.
-{% enddocs %}
-
-{% docs autowash_location_id %}
-ID of the location where the activity occurred.
-{% enddocs %}
-
-{% docs duration %}
-Duration of the coupon.
-{% enddocs %}
-
-{% docs duration_in_months %}
-Duration in months.
-{% enddocs %}
-
-{% docs max_redemptions %}
-Maximum number of times the coupon can be redeemed.
-{% enddocs %}
-
-{% docs refund_flag %}
-Flag indicating if the transaction was refunded.
-{% enddocs %}
-
-{% docs LOCATION_IS_FRANCHISE %}
-Boolean flag indicating if the location is a franchise.
-{% enddocs %}
-
-{% docs TEST_LOCATION %}
-Boolean flag indicating if the location is a test/demo location.
-{% enddocs %}
-
-{% docs LOCATION_CODE %}
-Short internal code used for location identification.
-{% enddocs %}
-
-{% docs LOCATION_CREATED_DATETIME %}
-Timestamp when the location record was first created.
-{% enddocs %}
-
-{% docs pause_request_date %}
-Date when pause was requested.
-{% enddocs %}
-
-{% docs pause_effective_date %}
-Date when pause is effective.
-{% enddocs %}
-
-{% docs pause_end_date %}
-Date when pause ends.
-{% enddocs %}
-
-{% docs vehicle_make %}
-Make of the vehicle.
-{% enddocs %}
-
-{% docs vehicle_model %}
-Model of the vehicle.
-{% enddocs %}
-
-{% docs vehicle_year %}
-Year of the vehicle.
-{% enddocs %}
-
-{% docs vehicle_color %}
-Color of the vehicle.
-{% enddocs %}
-
-{% docs rfid_tag_number %}
-RFID tag number assigned to the vehicle.
-{% enddocs %}
-
-{% docs rfid_tag_status %}
-Status of the RFID tag.
-{% enddocs %}
-
-{% docs rfid_tag_type %}
-Type of the RFID tag.
-{% enddocs %}
-
-{% docs rfid_tag_location_id %}
-Location ID where the RFID tag was assigned.
-{% enddocs %}
-
-{% docs rfid_tag_unique_tenant_location_id %}
-Unique tenant-location ID for the RFID tag assignment.
-{% enddocs %}
-
-{% docs stripe_subscription_item_history_id %}
-Unique identifier for the subscription item history record.
-{% enddocs %}
-
-{% docs cancellation_reason %}
-General reason provided for cancellation, used across different cancellation types.
-{% enddocs %}
-
-{% docs cancellation_reason_category %}
-Category of the cancellation reason.
-{% enddocs %}
-
-{% docs cancellation_reason_subcategory %}
-Subcategory of the cancellation reason.
-{% enddocs %}
-
-{% docs cancellation_reason_details %}
-Detailed description of the cancellation reason.
-{% enddocs %}
-
-{% docs cancellation_reason_other_details %}
-Additional details for other cancellation reasons.
-{% enddocs %}
-
-{% docs cancellation_reason_source %}
-Source of the cancellation reason.
-{% enddocs %}
-
-{% docs cancellation_reason_source_details %}
-Detailed description of the cancellation reason source.
-{% enddocs %}
-
-{% docs cancellation_reason_source_other_details %}
-Additional details for other cancellation reason sources.
-{% enddocs %}
-
-{% docs cancellation_reason_source_category %}
-Category of the cancellation reason source.
-{% enddocs %}
-
-{% docs cancellation_reason_source_subcategory %}
-Subcategory of the cancellation reason source.
-{% enddocs %}
-
-{% docs override_location_id %}
-Override location ID.
-{% enddocs %}
-
-{% docs override_unique_tenant_location_id %}
-Unique tenant-location ID for the override.
-{% enddocs %}
-
-{% docs pending_downgrade_date %}
-Date when downgrade is pending.
-{% enddocs %}
-
-{% docs subscription_created_datetime %}
-Timestamp when the subscription was created.
-{% enddocs %}
-
-{% docs cancel_at_period_end_previous_flag %}
-Flag for previous cancel at period end.
-{% enddocs %}
-
-{% docs cancel_at_period_end_current_falg %}
-Flag for current cancel at period end.
-{% enddocs %}
-
-{% docs billing_cycle_anchor_previous_date %}
-Previous billing cycle anchor date.
-{% enddocs %}
-
-{% docs billing_cycle_anchor_current_date %}
-Current billing cycle anchor date.
-{% enddocs %}
-
-{% docs cancel_at_previous_date %}
-Previous cancel at date.
-{% enddocs %}
-
-{% docs cancel_at_current_date %}
-Current cancel at date.
-{% enddocs %}
-
-{% docs canceled_at_previous_date %}
-Previous canceled at date.
-{% enddocs %}
-
-{% docs canceled_at_current_date %}
-Current canceled at date.
-{% enddocs %}
-
-{% docs tax_rate_previous %}
-Previous tax rate.
-{% enddocs %}
-
-{% docs tax_rate_current %}
-Current tax rate.
-{% enddocs %}
-
-{% docs downgrade_price_id_previous %}
-Previous downgrade price ID.
-{% enddocs %}
-
-{% docs downgrade_price_id_current %}
-Current downgrade price ID.
-{% enddocs %}
-
-{% docs downgrade_expiration_previous_date %}
-Previous downgrade expiration date.
-{% enddocs %}
-
-{% docs downgrade_expiration_current_date %}
-Current downgrade expiration date.
-{% enddocs %}
-
-{% docs auto_cancel_date_current_date %}
-Current auto cancel date.
-{% enddocs %}
-
-{% docs auto_cancel_date_previous_date %}
-Previous auto cancel date.
-{% enddocs %}
-
-{% docs pause_request_date_previous_date %}
-Previous pause request date.
-{% enddocs %}
-
-{% docs pause_effective_date_previous_date %}
-Previous pause effective date.
-{% enddocs %}
-
-{% docs pause_end_date_previous_date %}
-Previous pause end date.
-{% enddocs %}
-
-{% docs cancellation_details_reason_previous %}
-Previous cancellation reason.
-{% enddocs %}
-
-{% docs aaa_membership_number_previous %}
-Previous AAA membership number.
-{% enddocs %}
-
-{% docs price_id_previous %}
-Previous price ID.
-{% enddocs %}
-
-{% docs price_id_current %}
-Current price ID.
-{% enddocs %}
-
-{% docs quantity_previous %}
-Previous quantity.
-{% enddocs %}
-
-{% docs quantity_current %}
-Current quantity.
-{% enddocs %}
-
-{% docs license_plate_number_previous %}
-Previous license plate number.
-{% enddocs %}
-
-{% docs license_plate_number_current %}
-Current license plate number.
-{% enddocs %}
-
-{% docs license_plate_state_previous %}
-Previous license plate state.
-{% enddocs %}
-
-{% docs license_plate_state_current %}
-Current license plate state.
-{% enddocs %}
-
-{% docs vehicle_make_previous %}
-Previous vehicle make.
-{% enddocs %}
-
-{% docs vehicle_make_current %}
-Current vehicle make.
-{% enddocs %}
-
-{% docs vehicle_model_previous %}
-Previous vehicle model.
-{% enddocs %}
-
-{% docs vehicle_model_current %}
-Current vehicle model.
-{% enddocs %}
-
-{% docs vehicle_year_previous %}
-Previous vehicle year.
-{% enddocs %}
-
-{% docs vehicle_year_current %}
-Current vehicle year.
-{% enddocs %}
-
-{% docs vehicle_color_previous %}
-Previous vehicle color.
-{% enddocs %}
-
-{% docs vehicle_color_current %}
-Current vehicle color.
-{% enddocs %}
-
----
-
-## Intermediate Column Docs
-
-{% docs cancellation_reason_picklist_id %}
-ID of the picklist value representing the cancellation reason.
-{% enddocs %}
-
-{% docs cancellation_reason_text %}
-Text description of the cancellation reason from the picklist.
-{% enddocs %}
-
-{% docs canceled_user_id %}
-ID of the user who canceled the subscription.
-{% enddocs %}
-
-{% docs status_pre_cancel %}
-Subscription status before it was canceled.
-{% enddocs %}
-
-{% docs first_invoice_subtotal_amt %}
-Subtotal amount of the first invoice before any discounts or adjustments.
-{% enddocs %}
-
-{% docs first_invoice_discount_amt %}
-Discount amount applied to the first invoice.
-{% enddocs %}
-
-{% docs first_invoice_amt %}
-Net amount of the first invoice after all discounts and adjustments.
-{% enddocs %}
-
-{% docs first_invoice_created_date %}
-Date when the first invoice was created.
-{% enddocs %}
-
-{% docs number_of_paid_invoices_to_date %}
-Total count of paid invoices for the subscription.
-{% enddocs %}
-
-{% docs last_charge_failure_message %}
-Error message from the most recent failed charge attempt.
-{% enddocs %}
-
-{% docs last_charge_failure_code %}
-Error code from the most recent failed charge attempt.
-{% enddocs %}
-
-{% docs last_charge_failure_card_funding %}
-Funding type of the card used in the most recent failed charge attempt.
-{% enddocs %}
-
-{% docs first_subscription_id_for_plate %}
-ID of the first subscription associated with a license plate.
-{% enddocs %}
-
-{% docs is_legacy_reactivation %}
-Flag indicating if the subscription is a reactivation of a legacy subscription.
-{% enddocs %}
-
-{% docs most_recent_rfid %}
-Most recent RFID tag assigned to the vehicle.
-{% enddocs %}
-
-{% docs first_wash_location_id %}
-ID of the location where the subscription's first wash occurred.
-{% enddocs %}
-
-{% docs last_wash_location_id %}
-ID of the location where the subscription's most recent wash occurred.
-{% enddocs %}
-
-{% docs failure_code %}
-Error code associated with a failed transaction or operation.
-{% enddocs %}
-
-{% docs payment_method_details_card_funding %}
-Funding type of the payment card (credit, debit, prepaid, etc.).
-{% enddocs %}
-
-{% docs first_invoice_created_datetime %}
-Timestamp when the first invoice was created.
-{% enddocs %}
-
-{% docs subtotal_amt %}
-Subtotal amount before discounts and taxes.
-{% enddocs %}
-
-{% docs discount_amt %}
-Discount amount applied to the transaction.
-{% enddocs %}
-
-{% docs billing_reason %}
-Reason for generating the invoice or billing event.
-{% enddocs %}
-
-{% docs charge_created_datetime %}
-Timestamp when the charge was created.
-{% enddocs %}
-
-{% docs failure_message %}
-Detailed message explaining the reason for a failure.
-{% enddocs %}
-
-{% docs payment_method_id %}
-Identifier for the payment method used.
-{% enddocs %}
-
-{% docs rfid %}
-RFID tag identifier.
-{% enddocs %}
-
-{% docs vehicle_history_id %}
-Unique identifier for a vehicle history record.
 {% enddocs %}
 
 ---
