@@ -1,20 +1,1036 @@
-models:
+version: 2
 
-  
-  - name: STG_REF_USERS  # Replace with actual model file name (without .sql)
-    description: >
-      Staging model for user data enriched with contact info
+models:
+  - name: stg_autowash_account_vw
+    description: "Staging model for Autowash Account data from GENERAL.AUTOWASH_ACCOUNT__C. Contains account, subscription, and tenant details."
     columns:
-      - name: USER_ID
-        description: Primary key for users
+      - name: autowash_account_id
+        description: "Unique identifier for the Autowash Account."
         tests:
           - not_null
           - unique
-      - name: STRIPE_CUSTOMER_ID
-        description: Stripe ID of the customer
+      - name: tenant_id
+        description: "External identifier for the tenant."
         tests:
+          - not_null
+      - name: account_external_id
+        description: "External ID for the account."
+      - name: name
+        description: "Name of the account."
+      - name: stripe_subscription_id
+        description: "Stripe subscription ID associated with the account."
+      - name: primary_account_holder_user_id
+        description: "External ID of the primary account holder user."
+      - name: allow_pay_per_wash_flg
+        description: "Flag indicating if pay-per-wash is allowed."
+      - name: account_type
+        description: "Type of the account."
+      - name: created_datetime
+        description: "Timestamp when the account was created."
+      - name: lastmodified_datetime
+        description: "Timestamp when the account was last modified."
+
+  - name: stg_gift_card_promotion_vw
+    description: "Staging model for Gift Card Promotion data from GENERAL.GIFT_CARD_PROMOTION. Contains promotion, pricing, and tenant details."
+    columns:
+      - name: promotion_id
+        description: "Unique identifier for the promotion."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: purchase_price_amt
+        description: "Purchase price of the gift card promotion (in dollars)."
+      - name: value_amt
+        description: "Value of the gift card promotion (in dollars)."
+      - name: active_flag
+        description: "Flag indicating if the promotion is active."
+      - name: created_datetime
+        description: "Timestamp when the promotion was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the promotion was last modified."
+
+  - name: stg_gift_card_transaction_invoice_vw
+    description: "Staging model for Gift Card Transaction Invoice data from GENERAL.GIFT_CARD_TRANSACTION_INVOICE."
+    columns:
+      - name: gift_card_transaction_invoice_id
+        description: "Unique identifier for the gift card transaction invoice."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: gift_card_transaction_id
+        description: "ID of the related gift card transaction."
+      - name: invoice_id
+        description: "ID of the related invoice."
+      - name: redeemed_by_user_id
+        description: "ID of the user who redeemed the gift card."
+      - name: refund_flag
+        description: "Flag indicating if the transaction was a refund."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+
+  - name: stg_gift_card_transaction_purchase_vw
+    description: "Staging model for Gift Card Transaction Purchase data from GENERAL.GIFT_CARD_TRANSACTION_PURCHASE."
+    columns:
+      - name: gift_card_transaction_purchase_id
+        description: "Unique identifier for the gift card transaction purchase."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: gift_card_transaction_id
+        description: "ID of the related gift card transaction."
+      - name: invoice_id
+        description: "ID of the related invoice."
+      - name: is_guest_purchase_flag
+        description: "Flag indicating if the purchase was made by a guest."
+      - name: purchased_by_user_id
+        description: "ID of the user who made the purchase."
+      - name: purchased_by_guest_name
+        description: "Name of the guest purchaser."
+      - name: purchased_by_guest_email
+        description: "Email of the guest purchaser."
+      - name: gift_card_promotion_id
+        description: "ID of the related gift card promotion."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+
+  - name: stg_gift_card_transaction_vw
+    description: "Staging model for Gift Card Transaction data from GENERAL.GIFT_CARD_TRANSACTION."
+    columns:
+      - name: gift_card_transaction_id
+        description: "Unique identifier for the gift card transaction."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: gift_card_id
+        description: "ID of the related gift card."
+      - name: transaction_type_id
+        description: "Type of the transaction."
+      - name: gift_card_transaction_amt
+        description: "Transaction amount (in dollars)."
+      - name: user_id
+        description: "ID of the user involved in the transaction."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+
+  - name: stg_internal_legacy_reactivation_vw
+    description: "Staging model for legacy reactivation checks from INTERNAL.LEGACY_REACTIVATION_CHECK."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: license_plate_number
+        description: "License plate number for reactivation check."
+        tests:
+          - not_null
+
+  - name: stg_mobile_user_activity_vw
+    description: "Staging model for mobile user activity from GENERAL.MOBILE_USER_ACTIVITY. Tracks user actions, payments, and related metadata."
+    columns:
+      - name: mobile_user_activity_id
+        description: "Unique identifier for the mobile user activity."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: user_id
+        description: "ID of the user performing the activity."
+      - name: autowash_location_id
+        description: "ID of the location where the activity occurred."
+      - name: created_datetime
+        description: "Timestamp when the activity was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the activity was last modified."
+
+  - name: stg_reference_location_vw
+    description: "Staging model for reference location data, combining location and hierarchy attributes."
+    columns:
+      - name: location_external_id
+        description: "External identifier for the location."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: location_internal_name
+        description: "Internal system name for the location."
+      - name: zip_code
+        description: "ZIP code of the location."
+      - name: city
+        description: "City of the location."
+      - name: state
+        description: "State of the location."
+      - name: street1
+        description: "Primary street address."
+      - name: street2
+        description: "Secondary street address."
+      - name: location_code
+        description: "Short internal code for the location."
+      - name: row_level_security_id
+        description: "Row-level security identifier."
+      - name: is_franchise_flag
+        description: "Flag indicating if the location is a franchise."
+      - name: categorized_rls_id
+        description: "Categorized row-level security ID."
+
+  - name: stg_reference_picklist_vw
+    description: "Staging model for picklist values from GENERAL.PICKLIST_VALUE."
+    columns:
+      - name: picklist_value_id
+        description: "Unique identifier for the picklist value."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: picklist_id
+        description: "ID of the picklist."
+      - name: picklist_key
+        description: "Key for the picklist value."
+      - name: picklist_value
+        description: "Value for the picklist."
+      - name: active_flag
+        description: "Flag indicating if the picklist value is active."
+      - name: ordinal
+        description: "Ordinal position of the picklist value."
+      - name: created_date
+        description: "Date when the picklist value was created."
+      - name: last_modified_date
+        description: "Date when the picklist value was last modified."
+
+  - name: stg_reference_product_price_vw
+    description: "Staging model for product and price reference data, joining Stripe and AMP product/price sources."
+    columns:
+      - name: stripe_price_id
+        description: "Unique identifier for the Stripe price."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: stripe_product_id
+        description: "Unique identifier for the Stripe product."
+      - name: amp_product_price_id
+        description: "AMP product price ID."
+      - name: amp_product_id
+        description: "AMP product ID."
+      - name: product_name
+        description: "Name of the product."
+      - name: price_group_name
+        description: "Name of the price group."
+      - name: tier1_amt
+        description: "Tier 1 price amount."
+      - name: tier2_amt
+        description: "Tier 2 price amount."
+      - name: tier3_amt
+        description: "Tier 3 price amount."
+      - name: tier4_amt
+        description: "Tier 4 price amount."
+      - name: recurring_inverval
+        description: "Recurring interval for the price."
+
+  - name: stg_reference_users_vw
+    description: "Staging model for user reference data, joining user, contact, and employee sources."
+    columns:
+      - name: user_id
+        description: "Primary key for users."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External ID of the tenant for this user."
+        tests:
+          - not_null
+      - name: stripe_customer_id
+        description: "Stripe ID of the customer."
+        tests:
+          - unique
+      - name: email
+        description: "Email address of the user."
+      - name: name
+        description: "Name of the user."
+      - name: phone_number
+        description: "Phone number of the user."
+      - name: employee_id
+        description: "Employee ID if the user is an employee."
+      - name: zip_code
+        description: "ZIP code of the user."
+
+  - name: STG_REF_LOCATIONS_TBL
+    description: "Staging model for location reference data. Combines core location details from AUTOWASHLOCATION__C with hierarchy attributes from LOCATION_HIERARCHY. Materialized as an incremental table based on the LAST_MODIFIED_DATETIME."
+    columns:
+      - name: LOCATION_ID
+        description: "Unique identifier for each location."
+        tests:
+          - not_null
           - unique
       - name: TENANT_ID
-        description: External ID of the tenant for this location
+        description: "External identifier for the tenant to which the location belongs."
         tests:
           - not_null
+      - name: LOCATION_NAME
+        description: "Human-readable name of the location."
+      - name: LOCATION_INTERNAL_NAME
+        description: "Internal system name used for identifying the location."
+      - name: LOCATION_IS_FRANCHISE
+        description: "Boolean flag indicating if the location is a franchise."
+      - name: TEST_LOCATION
+        description: "Boolean flag indicating if the location is a test/demo location."
+      - name: LOCATION_CODE
+        description: "Short internal code used for location identification."
+      - name: LOCATION_STREET1
+        description: "Primary street address of the location."
+      - name: LOCATION_STREET2
+        description: "Secondary address line, if available."
+      - name: LOCATION_CITY
+        description: "City where the location is situated."
+      - name: LOCATION_STATE
+        description: "State or region of the location."
+      - name: LOCATION_ZIP_CODE
+        description: "Postal ZIP code of the location."
+      - name: LOCATION_IMAGE_URL
+        description: "Image URL or visual representation of the location."
+      - name: LOCATION_CREATED_DATETIME
+        description: "Timestamp when the location record was first created."
+      - name: LAST_MODIFIED_DATETIME
+        description: "Timestamp of the most recent update to the location record."
+      - name: ROW_LEVEL_SECURITY_ID
+        description: "Identifier used for enforcing row-level security by tenant or hierarchy."
+
+  - name: stg_stripe_charges_vw
+    description: "Staging model for Stripe charge data from REPORTING.STRIPE_CHARGES. Contains charge, payment, and card details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: charge_id
+        description: "Unique identifier for the Stripe charge."
+        tests:
+          - not_null
+          - unique
+      - name: charge_amt
+        description: "Charge amount (in dollars)."
+      - name: refunded_amt
+        description: "Refunded amount (in dollars)."
+      - name: status
+        description: "Status of the charge."
+      - name: disputed_flag
+        description: "Flag indicating if the charge is disputed."
+      - name: charge_created_datetime
+        description: "Timestamp when the charge was created."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: invoice_id
+        description: "ID of the related invoice."
+      - name: refunded_flag
+        description: "Flag indicating if the charge was refunded."
+      - name: credit_card_brand
+        description: "Brand of the credit card used."
+      - name: credit_card_country
+        description: "Country of the credit card."
+      - name: credit_card_expiration_month
+        description: "Expiration month of the credit card."
+      - name: credit_card_expiration_year
+        description: "Expiration year of the credit card."
+      - name: credit_card_last_four
+        description: "Last four digits of the credit card."
+      - name: failure_message
+        description: "Failure message if the charge failed."
+      - name: payment_method_id
+        description: "ID of the payment method."
+
+  - name: stg_stripe_coupons_vw
+    description: "Staging model for Stripe coupon data from REPORTING.STRIPE_COUPONS. Contains coupon, discount, and duration details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: coupon_id
+        description: "Unique identifier for the coupon."
+        tests:
+          - not_null
+          - unique
+      - name: coupon_name
+        description: "Name of the coupon."
+      - name: amount_off_amt
+        description: "Amount off (in dollars)."
+      - name: percent_off
+        description: "Percent off for the coupon."
+      - name: duration
+        description: "Duration of the coupon."
+      - name: duration_in_months
+        description: "Duration in months."
+      - name: max_redemptions
+        description: "Maximum number of redemptions."
+      - name: redeem_by_datetime
+        description: "Datetime by which the coupon must be redeemed."
+      - name: deleted_flag
+        description: "Flag indicating if the coupon is deleted."
+      - name: coupon_created_datetime
+        description: "Timestamp when the coupon was created."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: is_admin_flag
+        description: "Flag indicating if the coupon is admin-created."
+      - name: is_fixed_discount_flag
+        description: "Flag indicating if the coupon is a fixed discount."
+      - name: coupon_type
+        description: "Type of the coupon."
+      - name: auto_cancel_flg
+        description: "Flag indicating if the coupon auto-cancels."
+
+  - name: stg_stripe_discounts_vw
+    description: "Staging model for Stripe discount data from REPORTING.STRIPE_DISCOUNTS. Contains discount, coupon, and subscription details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: discount_id
+        description: "Unique identifier for the discount."
+        tests:
+          - not_null
+          - unique
+      - name: coupon_id
+        description: "ID of the related coupon."
+      - name: promotion_code_id
+        description: "ID of the related promotion code."
+      - name: stripe_customer_id
+        description: "Stripe customer ID."
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: invoice_id
+        description: "ID of the related invoice."
+      - name: invoice_line_item_id
+        description: "ID of the related invoice line item."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: deleted_flag
+        description: "Flag indicating if the discount is deleted."
+      - name: stripe_discount_id
+        description: "Unique identifier for the Stripe discount."
+      - name: start_datetime
+        description: "Start datetime of the discount."
+      - name: end_datetime
+        description: "End datetime of the discount."
+      - name: discount_type
+        description: "Type of the discount."
+      - name: discount_source_id
+        description: "Source ID for the discount."
+      - name: subscription_item_id
+        description: "ID of the related subscription item."
+
+  - name: stg_stripe_invoice_line_items_vw
+    description: "Staging model for Stripe invoice line items from REPORTING.STRIPE_INVOICE_LINE_ITEMS. Contains line item, product, and tax details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: invoice_id
+        description: "ID of the invoice."
+      - name: invoice_line_item_id
+        description: "Unique identifier for the invoice line item."
+        tests:
+          - not_null
+          - unique
+      - name: price_id
+        description: "ID of the price."
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: subscription_item_id
+        description: "ID of the related subscription item."
+      - name: type
+        description: "Type of the line item."
+      - name: description
+        description: "Description of the line item."
+      - name: invoice_line_item_amt
+        description: "Amount for the invoice line item (in dollars)."
+      - name: quantity
+        description: "Quantity for the line item."
+      - name: invoice_line_item_tax_amt
+        description: "Tax amount for the line item (in dollars)."
+      - name: tax_rate
+        description: "Tax rate for the line item."
+      - name: proration_flag
+        description: "Flag indicating if the line item is a proration."
+      - name: period_start_datetime
+        description: "Start datetime of the period."
+      - name: period_end_datetime
+        description: "End datetime of the period."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: invoice_line_item_discount_amt
+        description: "Discount amount for the line item (in dollars)."
+      - name: tax_inclusive_flag
+        description: "Flag indicating if the tax is inclusive."
+      - name: stored_wash_source
+        description: "Source of the stored wash."
+      - name: promo_code_id
+        description: "ID of the promo code."
+      - name: coupon_id
+        description: "ID of the coupon."
+      - name: tax_jurisdiction
+        description: "Tax jurisdiction for the line item."
+      - name: product_category
+        description: "Category of the product."
+      - name: product_id
+        description: "ID of the product."
+      - name: gift_card_line_item
+        description: "Indicates if the line item is a gift card transaction."
+
+  - name: stg_stripe_invoices_vw
+    description: "Staging model for Stripe invoices from REPORTING.STRIPE_INVOICES. Contains invoice, payment, and status details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: invoice_id
+        description: "Unique identifier for the invoice."
+        tests:
+          - not_null
+          - unique
+      - name: stripe_customer_id
+        description: "Stripe customer ID."
+      - name: status
+        description: "Status of the invoice."
+      - name: total_amt
+        description: "Total amount of the invoice (in dollars)."
+      - name: discount_amt
+        description: "Discount amount (in dollars)."
+      - name: subtotal_amt
+        description: "Subtotal amount (in dollars)."
+      - name: tax_amt
+        description: "Tax amount (in dollars)."
+      - name: paid_amt
+        description: "Amount paid (in dollars)."
+      - name: due_amt
+        description: "Amount due (in dollars)."
+      - name: remaining_amt
+        description: "Amount remaining (in dollars)."
+      - name: attempt_count
+        description: "Number of payment attempts."
+      - name: billing_reason
+        description: "Reason for billing."
+      - name: invoice_created_datetime
+        description: "Timestamp when the invoice was created."
+      - name: record_created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: invoice_pdf_url
+        description: "URL to the invoice PDF."
+      - name: is_gift_card_flag
+        description: "Flag indicating if the invoice is for a gift card."
+      - name: tax_inclusive_flag
+        description: "Flag indicating if the tax is inclusive."
+      - name: location_id
+        description: "ID of the location."
+      - name: created_by_admin_user_id
+        description: "ID of the admin who created the invoice."
+      - name: invoice_type
+        description: "Type of the invoice."
+      - name: paid_out_of_band_flag
+        description: "Flag indicating if the invoice was paid out of band."
+      - name: checkout_id
+        description: "ID of the checkout."
+      - name: wash_type_id
+        description: "ID of the wash type."
+      - name: prepaid_wash_promotion_id
+        description: "ID of the prepaid wash promotion."
+      - name: price_group_id
+        description: "ID of the price group."
+      - name: promo_code_id
+        description: "ID of the promo code."
+      - name: coupon_id
+        description: "ID of the coupon."
+      - name: paid_at_datetime
+        description: "Datetime when the invoice was paid."
+      - name: marked_uncollectible_at_date
+        description: "Date when the invoice was marked uncollectible."
+      - name: voided_at_date
+        description: "Date when the invoice was voided."
+      - name: finalized_at_datetime
+        description: "Datetime when the invoice was finalized."
+      - name: collection_method
+        description: "Collection method for the invoice."
+      - name: aaa_membership_number
+        description: "AAA membership number."
+      - name: account_id
+        description: "ID of the account."
+
+  - name: stg_stripe_subscription_history_vw
+    description: "Staging model for Stripe subscription history from REPORTING.STRIPE_SUBSCRIPTION_HISTORIES. Tracks changes to subscription status and billing."
+    columns:
+      - name: stripe_subscription_history_id
+        description: "Unique identifier for the subscription history record."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: cancel_at_period_end_previous_flag
+        description: "Flag for previous cancel at period end."
+      - name: cancel_at_period_end_current_falg
+        description: "Flag for current cancel at period end."
+      - name: status_previous
+        description: "Previous status."
+      - name: status_current
+        description: "Current status."
+      - name: billing_cycle_anchor_previous_date
+        description: "Previous billing cycle anchor date."
+      - name: billing_cycle_anchor_current_date
+        description: "Current billing cycle anchor date."
+      - name: cancel_at_previous_date
+        description: "Previous cancel at date."
+      - name: cancel_at_current_date
+        description: "Current cancel at date."
+      - name: canceled_at_previous_date
+        description: "Previous canceled at date."
+      - name: canceled_at_current_date
+        description: "Current canceled at date."
+      - name: coupon_id_previous
+        description: "Previous coupon ID."
+      - name: coupon_id_current
+        description: "Current coupon ID."
+      - name: promotion_code_id_previous
+        description: "Previous promotion code ID."
+      - name: promotion_code_id_current
+        description: "Current promotion code ID."
+      - name: tax_rate_previous
+        description: "Previous tax rate."
+      - name: tax_rate_current
+        description: "Current tax rate."
+      - name: downgrade_price_id_previous
+        description: "Previous downgrade price ID."
+      - name: downgrade_price_id_current
+        description: "Current downgrade price ID."
+      - name: downgrade_expiration_previous_date
+        description: "Previous downgrade expiration date."
+      - name: downgrade_expiration_current_date
+        description: "Current downgrade expiration date."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+      - name: auto_cancel_date_current_date
+        description: "Current auto cancel date."
+      - name: auto_cancel_date_previous_date
+        description: "Previous auto cancel date."
+      - name: pause_request_date_current_date
+        description: "Current pause request date."
+      - name: pause_request_date_previous_date
+        description: "Previous pause request date."
+      - name: pause_effective_date_current_date
+        description: "Current pause effective date."
+      - name: pause_effective_date_previous_date
+        description: "Previous pause effective date."
+      - name: pause_end_date_current_date
+        description: "Current pause end date."
+      - name: pause_end_date_previous_date
+        description: "Previous pause end date."
+      - name: cancellation_details_reason_current
+        description: "Current cancellation reason."
+      - name: cancellation_details_reason_previous
+        description: "Previous cancellation reason."
+      - name: aaa_membership_number_current
+        description: "Current AAA membership number."
+      - name: aaa_membership_number_previous
+        description: "Previous AAA membership number."
+
+  - name: stg_stripe_subscription_item_history_vw
+    description: "Staging model for Stripe subscription item history from REPORTING.STRIPE_SUBSCRIPTION_ITEM_HISTORIES. Tracks changes to subscription items."
+    columns:
+      - name: stripe_subscription_item_history_id
+        description: "Unique identifier for the subscription item history record."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: subscription_item_id
+        description: "ID of the related subscription item."
+      - name: price_id_previous
+        description: "Previous price ID."
+      - name: price_id_current
+        description: "Current price ID."
+      - name: quantity_previous
+        description: "Previous quantity."
+      - name: quantity_current
+        description: "Current quantity."
+      - name: tax_rate_previous
+        description: "Previous tax rate."
+      - name: tax_rate_current
+        description: "Current tax rate."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+
+  - name: stg_stripe_subscription_items_vw
+    description: "Staging model for Stripe subscription items from REPORTING.STRIPE_SUBSCRIPTION_ITEMS. Contains subscription item, price, and quantity details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: subscription_item_id
+        description: "Unique identifier for the subscription item."
+        tests:
+          - not_null
+          - unique
+      - name: price_id
+        description: "ID of the price."
+      - name: quantity
+        description: "Quantity for the subscription item."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+
+  - name: stg_stripe_subscriptions_vw
+    description: "Staging model for Stripe subscriptions from REPORTING.STRIPE_SUBSCRIPTIONS. Contains subscription, status, and location details."
+    columns:
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: subscription_id
+        description: "Unique identifier for the subscription."
+        tests:
+          - not_null
+          - unique
+      - name: stripe_customer_id
+        description: "Stripe customer ID."
+      - name: status
+        description: "Status of the subscription."
+      - name: cancel_at_period_end_flag
+        description: "Flag indicating if the subscription is set to cancel at period end."
+      - name: coupon_id
+        description: "ID of the coupon."
+      - name: promotion_code_id
+        description: "ID of the promotion code."
+      - name: tax_rate
+        description: "Tax rate for the subscription."
+      - name: downgrade_price_id
+        description: "ID of the downgrade price."
+      - name: account_id
+        description: "ID of the account."
+      - name: signup_zip_code
+        description: "ZIP code at signup."
+      - name: tax_location_override_id
+        description: "Tax location override ID."
+      - name: cancellation_details_reason
+        description: "Reason for cancellation."
+      - name: aaa_membership_number
+        description: "AAA membership number."
+      - name: subscription_location_id
+        description: "ID of the subscription location."
+      - name: created_by_admin_id
+        description: "ID of the admin who created the subscription."
+      - name: current_period_end_date
+        description: "End date of the current period."
+      - name: current_period_start_date
+        description: "Start date of the current period."
+      - name: billing_cycle_anchor_date
+        description: "Billing cycle anchor date."
+      - name: plan_cancel_request_date
+        description: "Date when plan cancel was requested."
+      - name: plan_cancel_scheduled_for_date
+        description: "Date when plan cancel is scheduled for."
+      - name: plan_end_date
+        description: "End date of the plan."
+      - name: plan_start_date
+        description: "Start date of the plan."
+      - name: subscription_created_datetime
+        description: "Timestamp when the subscription was created."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: downgrade_expiration_date
+        description: "Date when downgrade expires."
+      - name: auto_cancel_date
+        description: "Date when auto cancel is set."
+      - name: pause_request_date
+        description: "Date when pause was requested."
+      - name: pause_effective_date
+        description: "Date when pause is effective."
+      - name: pause_end_date
+        description: "Date when pause ends."
+      - name: pending_downgrade_date
+        description: "Date when downgrade is pending."
+      - name: subscription_unique_tenant_location_id
+        description: "Unique tenant-location ID for the subscription."
+      - name: new_status
+        description: "Calculated new status for the subscription."
+      - name: override_location_id
+        description: "Override location ID."
+      - name: override_unique_tenant_location_id
+        description: "Unique tenant-location ID for the override."
+      - name: signup_created_by_user_id
+        description: "User ID who created the signup."
+      - name: signup_closest_location_id
+        description: "Closest location ID at signup."
+      - name: signup_unique_tenant_location_id
+        description: "Unique tenant-location ID for the signup."
+      - name: migrated_pos_location_code
+        description: "Migrated POS location code."
+      - name: migrated_unique_tenant_location_code
+        description: "Unique tenant-location code for the migration."
+      - name: migrated_plan_flag
+        description: "Flag indicating if the plan was migrated."
+      - name: license_plate_id
+        description: "License plate ID."
+
+  - name: stg_subscription_cancellations_vw
+    description: "Staging model for subscription cancellations from GENERAL.SUBSCRIPTION_CANCELLATION__C. Contains cancellation, reason, and user details."
+    columns:
+      - name: cancellation_id
+        description: "Unique identifier for the cancellation."
+        tests:
+          - not_null
+          - unique
+      - name: subscription_cancellation_external_id
+        description: "External ID for the subscription cancellation."
+      - name: cancellation_comment
+        description: "Comment for the cancellation."
+      - name: cancellation_name_code
+        description: "Name/code for the cancellation."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: cancellation_reason_code
+        description: "Reason code for the cancellation."
+      - name: autowash_account_id
+        description: "ID of the related Autowash account."
+      - name: price_id
+        description: "ID of the price."
+      - name: vehicle_id
+        description: "ID of the vehicle."
+      - name: user_id
+        description: "ID of the user."
+      - name: is_cancelled_flag
+        description: "Flag indicating if the subscription is cancelled."
+      - name: cancellation_created_by_user_id
+        description: "User ID who created the cancellation."
+      - name: cancellation_last_modified_by_user_id
+        description: "User ID who last modified the cancellation."
+      - name: picklist_value_id
+        description: "ID of the picklist value."
+      - name: row_num
+        description: "Row number for ordering."
+
+  - name: stg_vehicle_history_vw
+    description: "Staging model for vehicle history from GENERAL.VEHICLE_HISTORY. Contains vehicle, event, and subscription details."
+    columns:
+      - name: vehicle_history_id
+        description: "Unique identifier for the vehicle history record."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+      - name: vehicle_id
+        description: "ID of the vehicle."
+      - name: license_plate_number
+        description: "License plate number."
+      - name: license_plate_state
+        description: "State of the license plate."
+      - name: license_plate_id
+        description: "Combined license plate number and state."
+      - name: vif_id
+        description: "VIF ID."
+      - name: color_id
+        description: "Color ID."
+      - name: event_type
+        description: "Type of the event."
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: price_id
+        description: "ID of the price."
+      - name: created_by_user_id
+        description: "User ID who created the record."
+      - name: last_modified_by_user_id
+        description: "User ID who last modified the record."
+
+  - name: stg_vehicle_rfid_vw
+    description: "Staging model for vehicle RFID data from GENERAL.VEHICLE_RFID. Contains RFID, vehicle, and integration details."
+    columns:
+      - name: vehicle_rfid_id
+        description: "Unique identifier for the vehicle RFID record."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: vehicle_id
+        description: "ID of the vehicle."
+      - name: rfid
+        description: "RFID value."
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: created_by_user_id
+        description: "User ID who created the record."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+      - name: last_modified_by_user_id
+        description: "User ID who last modified the record."
+      - name: integration_id
+        description: "Integration ID."
+
+  - name: stg_vehicle_vw
+    description: "Staging model for vehicle data from GENERAL.VEHICLE. Contains vehicle, account, and subscription details."
+    columns:
+      - name: vehicle_id
+        description: "Unique identifier for the vehicle."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "External identifier for the tenant."
+        tests:
+          - not_null
+      - name: created_datetime
+        description: "Timestamp when the record was created."
+      - name: created_date
+        description: "Date when the record was created."
+      - name: last_modified_datetime
+        description: "Timestamp when the record was last modified."
+      - name: last_modified_date
+        description: "Date when the record was last modified."
+      - name: account_id
+        description: "ID of the related account."
+      - name: is_active_flag
+        description: "Flag indicating if the vehicle is active."
+      - name: license_plate_number
+        description: "License plate number."
+      - name: license_plate_state
+        description: "State of the license plate."
+      - name: license_plate_id
+        description: "Combined license plate number and state."
+      - name: transfer_datetime
+        description: "Datetime when the vehicle was transferred."
+      - name: transfer_date
+        description: "Date when the vehicle was transferred."
+      - name: cancel_datetime
+        description: "Datetime when the vehicle was cancelled."
+      - name: cancel_date
+        description: "Date when the vehicle was cancelled."
+      - name: price_id
+        description: "ID of the price."
+      - name: vif_id
+        description: "VIF ID."
+      - name: color_id
+        description: "Color ID."
+      - name: migration_id
+        description: "Migration ID."
+      - name: is_temp_tag_flag
+        description: "Flag indicating if the vehicle has a temporary tag."
+      - name: subscription_id
+        description: "ID of the related subscription."
+      - name: active_subscription_id
+        description: "ID of the active subscription."
+      - name: subscription_status
+        description: "Status of the subscription."
+      - name: integration_metadata
+        description: "Integration metadata."
+      - name: created_by_user_id
+        description: "User ID who created the record."
+      - name: last_modified_by_user_id
+        description: "User ID who last modified the record."
+      - name: vin
+        description: "Vehicle Identification Number."
+      - name: model_label_override
+        description: "Model label override."
+
+# --- End of all models ---
