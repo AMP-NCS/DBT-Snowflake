@@ -25,13 +25,6 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-node_colors:
-  staging: '#1f77b4'      # blue
-  intermediate: '#ff7f0e' # orange
-  fact: '#2ca02c'         # green
-  reporting: '#d62728'    # red
-  dimension: '#9467bd'    # purple
-
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
@@ -50,23 +43,38 @@ models:
         +materialized: view
         +database: "{{env_var('DBT_AMP_DB')}}"
         +schema: DBT_DEV_PCALLAHAN
+        +docs:
+          show: true
+          node_color: '#d62728'    # red
     intermediate:
       AMP:
         +materialized: view
         +database: "{{env_var('DBT_AMP_DB')}}"
         +schema: DBT_DEV_PCALLAHAN
+        +docs:
+          show: true
+          node_color: '#ff7f0e' # orange
     fact:
       AMP:
         +materialized: table
         +database: "{{env_var('DBT_AMP_DB')}}"
         +schema: DBT_DEV_PCALLAHAN
+        +docs:
+          show: true
+          node_color: '#2ca02c'         # green
     reporting:
       AMP:
         +materialized: view
         +database: "{{env_var('DBT_AMP_DB')}}"
         +schema: DBT_DEV_PCALLAHAN
+        +docs:
+          show: true
+          node_color: '#1f77b4'      # blue
     dimension:
       AMP:
         +materialized: table
         +database: "{{env_var('DBT_AMP_DB')}}"
         +schema: DBT_DEV_PCALLAHAN
+        +docs:
+          show: true
+          node_color: '#9467bd'    # purple 
