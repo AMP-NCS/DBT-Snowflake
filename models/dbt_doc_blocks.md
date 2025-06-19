@@ -1236,4 +1236,156 @@ Previous vehicle color.
 
 {% docs vehicle_color_current %}
 Current vehicle color.
+{% enddocs %}
+
+---
+
+## Intermediate Models
+
+{% docs int_subscription_cancellations_vw %}
+Intermediate model that provides the latest cancellation details for each subscription, including reason codes, user information, and pre-cancellation status.
+{% enddocs %}
+
+{% docs int_subscription_first_invoice_vw %}
+Intermediate model that captures the first paid invoice for each subscription, including amounts and creation dates.
+{% enddocs %}
+
+{% docs int_subscription_invoice_count_vw %}
+Intermediate model that counts the total number of paid invoices for each subscription.
+{% enddocs %}
+
+{% docs int_subscription_last_charge_failure_vw %}
+Intermediate model that provides details about the most recent failed charge attempt for each subscription.
+{% enddocs %}
+
+{% docs int_subscription_vehicle_tracking_vw %}
+Intermediate model that tracks vehicle information for subscriptions, including license plate history, RFID tags, and legacy reactivation status.
+{% enddocs %}
+
+{% docs int_subscription_wash_locations_vw %}
+Intermediate model that tracks the first and last wash locations for each subscription based on mobile user activity.
+{% enddocs %}
+
+---
+
+## Intermediate Column Docs
+
+{% docs cancellation_reason_picklist_id %}
+ID of the picklist value representing the cancellation reason.
+{% enddocs %}
+
+{% docs cancellation_reason_text %}
+Text description of the cancellation reason from the picklist.
+{% enddocs %}
+
+{% docs canceled_user_id %}
+ID of the user who canceled the subscription.
+{% enddocs %}
+
+{% docs status_pre_cancel %}
+Subscription status before it was canceled.
+{% enddocs %}
+
+{% docs first_invoice_subtotal_amt %}
+Subtotal amount of the first invoice.
+{% enddocs %}
+
+{% docs first_invoice_discount_amt %}
+Discount amount applied to the first invoice.
+{% enddocs %}
+
+{% docs first_invoice_amt %}
+Net amount of the first invoice after discounts.
+{% enddocs %}
+
+{% docs first_invoice_created_date %}
+Date when the first invoice was created.
+{% enddocs %}
+
+{% docs number_of_paid_invoices_to_date %}
+Total count of paid invoices for the subscription.
+{% enddocs %}
+
+{% docs last_charge_failure_message %}
+Error message from the most recent failed charge attempt.
+{% enddocs %}
+
+{% docs last_charge_failure_code %}
+Error code from the most recent failed charge attempt.
+{% enddocs %}
+
+{% docs last_charge_failure_card_funding %}
+Funding type of the card used in the most recent failed charge attempt.
+{% enddocs %}
+
+{% docs first_subscription_id_for_plate %}
+ID of the first subscription associated with a license plate.
+{% enddocs %}
+
+{% docs is_legacy_reactivation %}
+Flag indicating if the subscription is a reactivation of a legacy subscription.
+{% enddocs %}
+
+{% docs most_recent_rfid %}
+Most recent RFID tag assigned to the vehicle.
+{% enddocs %}
+
+{% docs first_wash_location_id %}
+ID of the location where the subscription's first wash occurred.
+{% enddocs %}
+
+{% docs last_wash_location_id %}
+ID of the location where the subscription's most recent wash occurred.
+{% enddocs %}
+
+{% docs failure_code %}
+Error code associated with a failed transaction or operation.
+{% enddocs %}
+
+{% docs payment_method_details_card_funding %}
+Funding type of the payment card (credit, debit, prepaid, etc.).
+{% enddocs %}
+
+{% docs mobile_user_activity_id %}
+Unique identifier for a mobile user activity record.
+{% enddocs %}
+
+{% docs first_invoice_created_datetime %}
+Timestamp when the first invoice was created.
+{% enddocs %}
+
+{% docs subtotal_amt %}
+Subtotal amount before discounts and taxes.
+{% enddocs %}
+
+{% docs discount_amt %}
+Discount amount applied to the transaction.
+{% enddocs %}
+
+{% docs billing_cycle_anchor_date %}
+Date that determines the billing cycle schedule.
+{% enddocs %}
+
+{% docs billing_reason %}
+Reason for generating the invoice or billing event.
+{% enddocs %}
+
+{% docs charge_created_datetime %}
+Timestamp when the charge was created.
+{% enddocs %}
+
+{% docs failure_message %}
+Detailed message explaining the reason for a failure.
+{% enddocs %}
+
+{% docs payment_method_id %}
+Identifier for the payment method used.
+{% enddocs %}
+
+{% docs rfid %}
+RFID tag identifier.
+{% enddocs %}
+
+{% docs vehicle_history_id %}
+Unique identifier for a vehicle history record.
 {% enddocs %} 

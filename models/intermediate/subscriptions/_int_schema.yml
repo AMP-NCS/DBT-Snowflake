@@ -1,0 +1,96 @@
+version: 2
+
+models:
+  - name: int_subscription_cancellations_vw
+    description: "{{ doc('int_subscription_cancellations_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+      - name: cancellation_id
+        description: "Unique identifier for a cancellation record"
+      - name: subscription_cancellation_external_id
+        description: "External identifier for the cancellation record"
+      - name: cancellation_comment
+        description: "User-provided comment explaining the cancellation reason"
+      - name: cancellation_reason_code
+        description: "Code representing the reason for cancellation"
+      - name: cancellation_reason_picklist_id
+        description: "{{ doc('cancellation_reason_picklist_id') }}"
+      - name: cancellation_reason_text
+        description: "{{ doc('cancellation_reason_text') }}"
+      - name: canceled_user_id
+        description: "{{ doc('canceled_user_id') }}"
+      - name: status_pre_cancel
+        description: "{{ doc('status_pre_cancel') }}"
+
+  - name: int_subscription_first_invoice_vw
+    description: "{{ doc('int_subscription_first_invoice_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: first_invoice_subtotal_amt
+        description: "{{ doc('first_invoice_subtotal_amt') }}"
+      - name: first_invoice_discount_amt
+        description: "{{ doc('first_invoice_discount_amt') }}"
+      - name: first_invoice_amt
+        description: "{{ doc('first_invoice_amt') }}"
+      - name: invoice_created_datetime
+        description: "{{ doc('first_invoice_created_datetime') }}"
+      - name: first_invoice_created_date
+        description: "{{ doc('first_invoice_created_date') }}"
+
+  - name: int_subscription_invoice_count_vw
+    description: "{{ doc('int_subscription_invoice_count_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: number_of_paid_invoices_to_date
+        description: "{{ doc('number_of_paid_invoices_to_date') }}"
+
+  - name: int_subscription_last_charge_failure_vw
+    description: "{{ doc('int_subscription_last_charge_failure_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: last_charge_failure_message
+        description: "{{ doc('last_charge_failure_message') }}"
+      - name: last_charge_failure_code
+        description: "{{ doc('last_charge_failure_code') }}"
+      - name: last_charge_failure_card_funding
+        description: "{{ doc('last_charge_failure_card_funding') }}"
+
+  - name: int_subscription_vehicle_tracking_vw
+    description: "{{ doc('int_subscription_vehicle_tracking_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: vehicle_id
+        description: "{{ doc('vehicle_id') }}"
+      - name: license_plate_number
+        description: "{{ doc('license_plate_number') }}"
+      - name: license_plate_state
+        description: "{{ doc('license_plate_state') }}"
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+      - name: license_plate_id
+        description: "{{ doc('license_plate_id') }}"
+      - name: first_subscription_id_for_plate
+        description: "{{ doc('first_subscription_id_for_plate') }}"
+      - name: is_legacy_reactivation
+        description: "{{ doc('is_legacy_reactivation') }}"
+      - name: most_recent_rfid
+        description: "{{ doc('most_recent_rfid') }}"
+
+  - name: int_subscription_wash_locations_vw
+    description: "{{ doc('int_subscription_wash_locations_vw') }}"
+    columns:
+      - name: subscription_id
+        description: "{{ doc('subscription_id') }}"
+      - name: tenant_id
+        description: "{{ doc('tenant_id') }}"
+      - name: first_wash_location_id
+        description: "{{ doc('first_wash_location_id') }}"
+      - name: last_wash_location_id
+        description: "{{ doc('last_wash_location_id') }}" 
