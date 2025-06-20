@@ -14,4 +14,65 @@ models:
       - name: total_redemption_amount
         description: >
           Total amount redeemed from gift cards for this invoice, in dollars.
-          Converted from cents and made positive for easier reporting. 
+          Converted from cents and made positive for easier reporting.
+
+  - name: int_transactions_vw
+    description: >
+      Comprehensive intermediate model that combines invoice data, gift card redemptions,
+      and line item details. This model includes regular invoices, kiosk-specific invoices,
+      and detailed line items with proper handling of gift card redemptions and tax calculations.
+    columns:
+      - name: tenant_id
+        description: External identifier for the tenant
+        tests:
+          - not_null
+      - name: invoice_id
+        description: Unique identifier for the invoice
+        tests:
+          - not_null
+      - name: payment_id
+        description: ID of the associated payment
+      - name: customer_id
+        description: Stripe customer ID
+      - name: paid_out_of_band
+        description: Flag indicating if the invoice was paid outside of Stripe
+      - name: invoice_created
+        description: Timestamp when the invoice was created
+      - name: subscription_id
+        description: ID of the associated subscription
+      - name: billing_reason
+        description: Reason for generating the invoice
+      - name: status
+        description: Current status of the invoice
+      - name: tax_rate
+        description: Applied tax rate (converted to decimal)
+      - name: total_amt
+        description: Total amount including gift card redemptions
+      - name: amount_due
+        description: Amount still due on the invoice
+      - name: amount_paid
+        description: Amount already paid on the invoice
+      - name: location
+        description: Internal name of the location
+      - name: location_id
+        description: Unique identifier for the location
+      - name: location_zip_code
+        description: ZIP code of the location
+      - name: attendant
+        description: Email of the attendant who created the invoice
+      - name: attendant_name
+        description: Name of the attendant who created the invoice
+      - name: app_id
+        description: Identifier for the application that created the invoice
+      - name: collection_method
+        description: Method used for collecting payment
+      - name: finalized_at
+        description: Timestamp when the invoice was finalized
+      - name: paid_at
+        description: Timestamp when the invoice was paid
+      - name: marked_uncollectible_at
+        description: Date when the invoice was marked as uncollectible
+      - name: voided_at
+        description: Date when the invoice was voided
+      - name: row_level_security_id
+        description: ID used for row-level security filtering 
